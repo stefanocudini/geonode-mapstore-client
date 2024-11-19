@@ -840,7 +840,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
@@ -1862,7 +1862,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
@@ -2569,7 +2569,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
@@ -2919,7 +2919,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
@@ -3197,7 +3197,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
@@ -4557,7 +4557,7 @@
                         {
                             "type": "settings",
                             "id": "settings",
-                            "labelId": "gnviewer.settings",
+                            "labelId": "gnviewer.management",
                             "disableIf": "{!context.canManageResourceSettings(state('gnResourceData'))}",
                             "items": [
                                 true
