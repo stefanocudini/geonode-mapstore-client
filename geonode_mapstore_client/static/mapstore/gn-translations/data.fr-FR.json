@@ -1,6 +1,16 @@
 {
     "locale": "fr-FR",
     "messages": {
+        "metadata": {
+            "error": {
+                "must match exactly one schema in oneOf": "Veuillez sélectionner l'une des valeurs disponibles",
+                "must be string": "La valeur doit être une chaîne",
+                "must be object": "La valeur doit être un objet",
+                "must NOT have fewer than 1 items": "Veuillez sélectionner au moins un élément",
+                "must match format \"uri\"": "Veuillez saisir un 'uri' valide",
+                "must have required property": "Cette propriété est obligatoire"
+            }
+        },
         "geostory": {
             "geoNode": "GeoNode"
         },
@@ -438,7 +448,12 @@
             "uploadName": "Nom",
             "uploadCreated": "Créé",
             "replaceDataset": "Remplacer L'Ensemble De Données",
-            "replaceDatasetTitle": "Remplacer l'ensemble de données"
+            "replaceDatasetTitle": "Remplacer l'ensemble de données",
+            "metadataFor": "Métadonnées:",
+            "metadataUpdateError": "Il n'a pas été possible de mettre à jour les métadonnées",
+            "metadataNotFound": "Les métadonnées ne sont pas trouvées pour la ressource sélectionnée",
+            "filterMetadata": "Filtrer par nom...",
+            "noMetadataFound": "Aucune métadonnée trouvée..."
         }
     }
 }

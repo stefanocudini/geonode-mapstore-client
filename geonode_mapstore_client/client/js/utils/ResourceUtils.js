@@ -339,9 +339,8 @@ export const getResourceTypesInfo = () => ({
         })),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
         name: 'Dataset',
-        formatMetadataUrl: (resource) => isDefaultDatasetSubtype(resource?.subtype)
-            ? `/datasets/${resource.store ? resource.store + ":" : ''}${resource.alternate}/metadata`
-            : `/resources/${resource.pk}/metadata`
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`
     },
     [ResourceTypes.MAP]: {
         icon: 'map',
@@ -351,7 +350,8 @@ export const getResourceTypesInfo = () => ({
             config: 'map_preview'
         })),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
-        formatMetadataUrl: (resource) => (`/maps/${resource.pk}/metadata`)
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`
     },
     [ResourceTypes.DOCUMENT]: {
         icon: 'file',
@@ -360,8 +360,9 @@ export const getResourceTypesInfo = () => ({
         hasPermission: (resource) => resourceHasPermission(resource, 'download_resourcebase'),
         formatEmbedUrl: (resource) => isDocumentExternalSource(resource) ? undefined : resource?.embed_url && parseDevHostname(resource.embed_url),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
-        formatMetadataUrl: (resource) => (`/documents/${resource.pk}/metadata`),
-        metadataPreviewUrl: (resource) => (`/documents/${resource.pk}/metadata_detail?preview`)
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`,
+        metadataPreviewUrl: (resource) => `/metadata/${resource.pk}/embed`
     },
     [ResourceTypes.GEOSTORY]: {
         icon: 'book',
@@ -369,7 +370,8 @@ export const getResourceTypesInfo = () => ({
         canPreviewed: (resource) => resourceHasPermission(resource, 'view_resourcebase'),
         formatEmbedUrl: (resource) => resource?.embed_url && parseDevHostname(resource.embed_url),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
-        formatMetadataUrl: (resource) => (`/apps/${resource.pk}/metadata`)
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`
     },
     [ResourceTypes.DASHBOARD]: {
         icon: 'dashboard',
@@ -377,7 +379,8 @@ export const getResourceTypesInfo = () => ({
         canPreviewed: (resource) => resourceHasPermission(resource, 'view_resourcebase'),
         formatEmbedUrl: (resource) => resource?.embed_url && parseDevHostname(resource.embed_url),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
-        formatMetadataUrl: (resource) => (`/apps/${resource.pk}/metadata`)
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`
     },
     [ResourceTypes.VIEWER]: {
         icon: 'cogs',
@@ -385,7 +388,8 @@ export const getResourceTypesInfo = () => ({
         canPreviewed: (resource) => resourceHasPermission(resource, 'view_resourcebase'),
         formatEmbedUrl: () => false,
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
-        formatMetadataUrl: (resource) => (`/apps/${resource.pk}/metadata`)
+        formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
+        formatMetadataDetailUrl: (resource) => `/metadata/${resource.pk}`
     }
 });
 
@@ -398,7 +402,11 @@ export const getMetadataUrl = (resource) => {
 };
 
 export const getMetadataDetailUrl = (resource) => {
-    return (getMetadataUrl(resource)) ? getMetadataUrl(resource) + '_detail' : '';
+    if (resource) {
+        const { formatMetadataDetailUrl = () => '' } = getResourceTypesInfo()[resource?.resource_type] || {};
+        return formatMetadataDetailUrl(resource);
+    }
+    return '';
 };
 
 export const getResourceStatuses = (resource) => {

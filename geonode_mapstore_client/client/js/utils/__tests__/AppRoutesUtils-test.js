@@ -57,6 +57,7 @@ describe('Test App Routes Utils', () => {
 
     it('test catalogue routes', () => {
         const [
+            metadataRoute,
             datasetSubtypeRoute,
             datasetRoute,
             datasetEditDataRoute,
@@ -71,6 +72,9 @@ describe('Test App Routes Utils', () => {
             uploadDatasetRoute,
             uploadDocumentRoute
         ] = routeUtils.CATALOGUE_ROUTES;
+        expect(metadataRoute.path).toEqual(['/metadata/:pk']);
+        expect(metadataRoute.name).toEqual('metadata');
+        expect(metadataRoute.shouldNotRequestResources).toEqual(true);
         expect(datasetSubtypeRoute.path).toEqual(['/dataset/:subtype/:pk']);
         expect(datasetSubtypeRoute.name).toEqual('dataset_viewer');
         expect(datasetSubtypeRoute.shouldNotRequestResources).toEqual(true);
