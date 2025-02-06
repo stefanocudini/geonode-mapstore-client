@@ -300,6 +300,11 @@ export const getDatasetByPk = (pk) => {
         .then(({ data }) => data.dataset);
 };
 
+export const getDatasetTimeSettingsByPk = (pk) => {
+    return axios.get(getEndpointUrl(DATASETS, `/${pk}/timeseries`))
+        .then(({ data }) => data).catch(() => {});
+};
+
 export const getDocumentByPk = (pk) => {
     return axios.get(getEndpointUrl(DOCUMENTS, `/${pk}`), {
         params: {
@@ -388,6 +393,10 @@ export const updateGeoApp = (pk, body) => {
         .then(({ data }) => data.geoapp);
 };
 
+export const updateDatasetTimeSeries = (pk, body) => {
+    return axios.put(getEndpointUrl(DATASETS, `/${pk}/timeseries`), body)
+        .then(({ data }) => data);
+};
 
 export const updateDataset = (pk, body) => {
     return axios.patch(getEndpointUrl(DATASETS, `/${pk}`), body)

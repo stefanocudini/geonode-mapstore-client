@@ -9,6 +9,8 @@
 import axios from '@mapstore/framework/libs/ajax';
 import { Observable } from 'rxjs';
 import get from 'lodash/get';
+import castArray from 'lodash/castArray';
+
 import { mapInfoSelector } from '@mapstore/framework/selectors/map';
 import { userSelector } from '@mapstore/framework/selectors/security';
 import {
@@ -73,12 +75,16 @@ import {
     ResourceTypes,
     cleanCompactPermissions,
     toGeoNodeMapConfig,
-    RESOURCE_MANAGEMENT_PROPERTIES
+    RESOURCE_MANAGEMENT_PROPERTIES,
+    getDimensions
 } from '@js/utils/ResourceUtils';
 import {
     ProcessTypes,
     ProcessStatus
 } from '@js/utils/ResourceServiceUtils';
+import { updateDatasetTimeSeries } from '@js/api/geonode/v2/index';
+import { updateNode } from '@mapstore/framework/actions/layers';
+import { layersSelector } from '@mapstore/framework/selectors/layers';
 
 const RESOURCE_MANAGEMENT_PROPERTIES_KEYS = Object.keys(RESOURCE_MANAGEMENT_PROPERTIES);
 
@@ -122,7 +128,24 @@ const SaveAPI = {
         return id ? updateDocument(id, body) : false;
     },
     [ResourceTypes.DATASET]: (state, id, body) => {
-        return id ? updateDataset(id, body) : false;
+        const currentResource = getResourceData(state);
+        const timeseries = currentResource?.timeseries;
+        const updatedBody = {
+            ...body,
+            ...(timeseries && { has_time: timeseries?.has_time })
+        };
+        return (id
+            ? axios.all([updateDataset(id, updatedBody), updateDatasetTimeSeries(id, timeseries)])
+            : Promise.resolve([]))
+            .then(([resource]) => {
+                if (timeseries) {
+                    const dimensions = resource?.has_time ? getDimensions({...resource, has_time: true}) : [];
+                    const layerId = layersSelector(state)?.find((l) => l.pk === resource?.pk)?.id;
+                    // actions to be dispacted are added to response array
+                    return [resource, updateNode(layerId, 'layers', { dimensions: dimensions?.length > 0 ? dimensions : undefined })];
+                }
+                return resource;
+            });
     },
     [ResourceTypes.VIEWER]: (state, id, body) => {
         const user = userSelector(state);
@@ -159,7 +182,8 @@ export const gnSaveContent = (action$, store) =>
                 ...(extent && { extent })
             };
             return Observable.defer(() => SaveAPI[contentType](state, action.id, body, action.reload))
-                .switchMap((resource) => {
+                .switchMap((response) => {
+                    const [resource, ...actions] = castArray(response);
                     if (action.reload) {
                         if (contentType === ResourceTypes.VIEWER) {
                             const sourcepk = get(state, 'router.location.pathname', '').split('/').pop();
@@ -183,7 +207,8 @@ export const gnSaveContent = (action$, store) =>
                                     ? successNotification({title: "saveDialog.saveSuccessTitle", message: "saveDialog.saveSuccessMessage"})
                                     : warningNotification(action.showNotifications)
                             ]
-                            : [])
+                            : []),
+                        ...actions // additional actions to be dispatched
                     );
                 })
                 .catch((error) => {
