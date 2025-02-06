@@ -75,6 +75,11 @@ export const plugins = {
         {
             overrides: {
                 containers: {
+                    TOC: {
+                        name: 'LayerDownload',
+                        target: 'toolbar',
+                        Component: LayerDownloadActionButton
+                    },
                     ActionNavbar: {
                         name: 'LayerDownload',
                         Component: LayerDownloadActionButton
