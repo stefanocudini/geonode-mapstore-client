@@ -78,7 +78,8 @@ export const plugins = {
                     TOC: {
                         name: 'LayerDownload',
                         target: 'toolbar',
-                        Component: LayerDownloadActionButton
+                        Component: LayerDownloadActionButton,
+                        position: 11
                     },
                     ActionNavbar: {
                         name: 'LayerDownload',
@@ -413,10 +414,6 @@ export const plugins = {
     DatasetsCatalogPlugin: toModulePlugin(
         'DatasetsCatalog',
         () => import(/* webpackChunkName: 'plugins/dataset-catalog' */ '@js/plugins/DatasetsCatalog')
-    ),
-    LayerSettingsPlugin: toModulePlugin(
-        'LayerSettings',
-        () => import(/* webpackChunkName: 'plugins/layer-settings' */ '@js/plugins/LayerSettings')
     ),
     SyncPlugin: toModulePlugin(
         'Sync',
