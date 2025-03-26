@@ -35,12 +35,9 @@ import { getSelectedLayer } from '@mapstore/framework/selectors/layers';
 import { isLoggedIn } from '@mapstore/framework/selectors/security';
 import {
     browseData,
-    selectNode
+    selectNode,
+    showSettings
 } from '@mapstore/framework/actions/layers';
-import {
-    updateStatus,
-    initStyleService
-} from '@mapstore/framework/actions/styleeditor';
 import {
     setNewResource,
     setResourceType,
@@ -80,7 +77,6 @@ import {
     resourceToLayerConfig,
     ResourceTypes,
     toMapStoreMapConfig,
-    parseStyleName,
     getCataloguePath,
     isDefaultDatasetSubtype
 } from '@js/utils/ResourceUtils';
@@ -91,8 +87,7 @@ import {
 } from '@js/selectors/resource';
 import { updateAdditionalLayer } from '@mapstore/framework/actions/additionallayers';
 import { STYLE_OWNER_NAME } from '@mapstore/framework/utils/StyleEditorUtils';
-import { styleServiceSelector } from '@mapstore/framework/selectors/styleeditor';
-import { updateStyleService } from '@mapstore/framework/api/StyleEditor';
+import { initStyleService, resetStyleEditor } from '@mapstore/framework/actions/styleeditor';
 import { CLICK_ON_MAP, resizeMap, CHANGE_MAP_VIEW, zoomToExtent } from '@mapstore/framework/actions/map';
 import { purgeMapInfoResults, closeIdentify, NEW_MAPINFO_REQUEST } from '@mapstore/framework/actions/mapInfo';
 import { saveError } from '@js/actions/gnsave';
@@ -101,7 +96,6 @@ import {
     success as successNotification,
     warning as warningNotification
 } from '@mapstore/framework/actions/notifications';
-import { getStyleProperties } from '@js/api/geonode/style';
 import { convertDependenciesMappingForCompatibility } from '@mapstore/framework/utils/WidgetsUtils';
 import {
     setResource as setContextCreatorResource,
@@ -145,27 +139,8 @@ const resourceTypes = {
                     .then((response) => {
                         const [mapConfig, gnLayer, timeseries] = response;
                         const newLayer = resourceToLayerConfig(gnLayer);
-
-                        if (!newLayer?.extendedParams?.defaultStyle || page !== 'dataset_edit_style_viewer') {
-                            return [mapConfig, {...gnLayer, timeseries}, newLayer];
-                        }
-
-                        return getStyleProperties({
-                            baseUrl: options?.styleService?.baseUrl,
-                            styleName: parseStyleName(newLayer.extendedParams.defaultStyle)
-                        }).then((updatedStyle) => {
-                            return [
-                                mapConfig,
-                                {...gnLayer, timeseries},
-                                {
-                                    ...newLayer,
-                                    availableStyles: [{
-                                        ...updatedStyle,
-                                        ...newLayer.extendedParams.defaultStyle
-                                    }]
-                                }
-                            ];
-                        });
+                        const _gnLayer = {...gnLayer, layerSettings: gnLayer.data};
+                        return [mapConfig, {..._gnLayer, timeseries}, newLayer];
                     })
             )
                 .switchMap((response) => {
@@ -204,11 +179,10 @@ const resourceTypes = {
                                 browseData(newLayer)
                             ]
                             : []),
-                        ...(page === 'dataset_edit_style_viewer'
+                        ...(page === 'dataset_edit_layer_settings'
                             ? [
-                                setControlProperty('visualStyleEditor', 'enabled', true),
+                                showSettings(newLayer.id, "layers", {opacity: newLayer.opacity ?? 1}),
                                 updateAdditionalLayer(newLayer.id, STYLE_OWNER_NAME, 'override', {}),
-                                updateStatus('edit'),
                                 resizeMap()
                             ]
                             : []),
@@ -443,7 +417,10 @@ const getResetActions = (isSameResource) => [
     resetControls(),
     ...(!isSameResource ? [ resetResourceState() ] : []),
     setControlProperty('rightOverlay', 'enabled', false),
-    setControlProperty(FIT_BOUNDS_CONTROL, 'geometry', null)
+    setControlProperty(FIT_BOUNDS_CONTROL, 'geometry', null),
+    // reset style editor state to avoid persistence service configuration in between resource pages
+    initStyleService(),
+    resetStyleEditor()
 ];
 
 export const gnViewerRequestNewResourceConfig = (action$, store) =>
@@ -508,7 +485,6 @@ export const gnViewerRequestResourceConfig = (action$, store) =>
                     loadingResourceConfig(false)
                 );
             }
-            const styleService = styleServiceSelector(state);
             const resourceData = getResourceData(state);
             const isSamePreviousResource = !resourceData?.['@ms-detail'] && resourceData?.pk === action.pk;
             return Observable.concat(
@@ -529,20 +505,8 @@ export const gnViewerRequestResourceConfig = (action$, store) =>
                             })
                     ]
                     : []),
-                ...(styleService?.baseUrl
-                    ? [Observable.defer(() => updateStyleService({
-                        styleService
-                    }))
-                        .switchMap((updatedStyleService) => {
-                            return Observable.of(initStyleService(updatedStyleService, {
-                                editingAllowedRoles: ['ALL'],
-                                editingAllowedGroups: []
-                            }));
-                        })]
-                    : []),
                 resourceObservable(action.pk, {
                     ...action.options,
-                    styleService: styleServiceSelector(state),
                     isSamePreviousResource,
                     resourceData,
                     selectedLayer: isSamePreviousResource && getSelectedLayer(state),

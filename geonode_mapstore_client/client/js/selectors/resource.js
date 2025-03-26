@@ -24,7 +24,9 @@ import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
+import omitBy from 'lodash/omitBy';
 import { generateContextResource } from '@mapstore/framework/selectors/contextcreator';
+import { layerSettingSelector, getSelectedLayer as getSelectedNode } from '@mapstore/framework/selectors/layers';
 
 const RESOURCE_MANAGEMENT_PROPERTIES_KEYS = Object.keys(RESOURCE_MANAGEMENT_PROPERTIES);
 
@@ -164,6 +166,16 @@ export const getDataPayload = (state, resourceType) => {
         const { mapConfig, ...mapViewerConfig } = data || {};
         return mapViewerConfig || {};
     }
+    case ResourceTypes.DATASET: {
+        let currentLayerSettings = layerSettingSelector(state)?.options ?? {};
+        currentLayerSettings = omitBy(currentLayerSettings,
+            (value, key) => key === "opacity" && value === 1); // skip default value
+        const selectedLayer = getSelectedNode(state);
+        return omit({
+            ...currentLayerSettings,
+            ...(selectedLayer && {fields: selectedLayer?.fields ?? {}})},
+        ['availableStyles', 'infoFormats']);
+    }
     default:
         return null;
     }
@@ -175,6 +187,20 @@ export const getExtentPayload = (state, resourceType) => {
         return getResourceExtent(state);
     }
     return null;
+};
+
+const compareObjects = (obj1, obj2) => {
+    if (!isEmpty(obj1) && !isEmpty(obj2)) {
+        return Object.keys(obj1).every((key) => {
+            const val1 = obj1[key];
+            const val2 = obj2?.[key];
+            if (typeof val1 === 'boolean') return val1 === (val2 ?? false);
+            if (typeof val1 === 'number') return val1 === (val2 ?? 0);
+            if (isEmpty(val1) && isEmpty(val2)) return false;
+            return isEqual(obj2?.[key], obj1[key]);
+        });
+    }
+    return false;
 };
 
 function removeProperty(value, paths) {
@@ -262,6 +288,18 @@ function isResourceDataEqual(state, initialData = {}, currentData = {}) {
             removeProperty(initialData, ['mapConfig']),
             removeProperty(currentData, ['mapConfig'])
         );
+    }
+    case ResourceTypes.DATASET: {
+        const selectedLayer = getSelectedNode(state);
+        const selectedLayerInitialState = getSelectedLayer(state);
+        const layerSettingsInitial = {...selectedLayerInitialState, ...initialData};
+
+        const isSettingsEqual = compareObjects(currentData, layerSettingsInitial);
+        const isAttributesEqual = !isEmpty(layerSettingsInitial)
+            && !isEmpty(selectedLayer)
+            && isEqual(layerSettingsInitial?.fields, selectedLayer.fields);
+
+        return isSettingsEqual && isAttributesEqual;
     }
     default:
         return true;

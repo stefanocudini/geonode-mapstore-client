@@ -598,8 +598,8 @@
                                 },
                                 {
                                     "type": "link",
-                                    "href": "{'#/dataset/' + (state('gnResourceData') || {}).pk + '/edit/style'}",
-                                    "labelId": "gnviewer.editStyle",
+                                    "href": "{'#/dataset/' + (state('gnResourceData') || {}).pk + '/edit/settings'}",
+                                    "labelId": "gnviewer.layerSettings.title",
                                     "disableIf": "{!context.resourceHasPermission(state('gnResourceData'), 'change_dataset_style')}"
                                 },
                                 {
@@ -1497,7 +1497,7 @@
                 "name": "Notifications"
             }
         ],
-        "dataset_edit_style_viewer": [
+        "dataset_edit_layer_settings": [
             {
                 "name": "ActionNavbar",
                 "cfg": {
@@ -1507,6 +1507,10 @@
                             "type": "link",
                             "href": "{'#/dataset/' + (state('gnResourceData') || {}).pk}",
                             "labelId": "gnviewer.goBackTo"
+                        },
+                        {
+                            "type": "plugin",
+                            "name": "Save"
                         }
                     ],
                     "rightMenuItems": [
@@ -1518,28 +1522,23 @@
                 }
             },
             {
-                "name": "VisualStyleEditor",
+                "name": "Save",
                 "cfg": {
-                    "styleService": {
-                        "baseUrl": "{state('settings') && state('settings').geonodeUrl && state('settings').geonodeUrl + 'gs/' || '/gs/'}",
-                        "formats": [
-                            "css",
-                            "sld"
-                        ],
-                        "availableUrls": [
-                            "{state('settings') && state('settings').geoserverUrl || '/geoserver/'}",
-                            "{state('settings') && state('settings').geonodeUrl && state('settings').geonodeUrl + 'gs/' || '/gs/'}"
-                        ],
-                        "fonts": [
-                            "Arial",
-                            "Courier New",
-                            "Monospaced",
-                            "SansSerif",
-                            "Serif",
-                            "Times New Roman"
-                        ]
-                    },
-                    "editingAllowedRoles": null,
+                    "saveMsgId": "gnhome.apply",
+                    "className": "gn-apply-settings"
+                }
+            },
+            {
+                "name": "TOCItemsSettings",
+                "mandatory": true,
+                "cfg": {
+                    "enableIFrameModule": true,
+                    "className": "gn-dataset-layersettings"
+                }  
+            },
+            {
+                "name": "StyleEditor",
+                "cfg": {
                     "enableSetDefaultStyle": true
                 }
             },

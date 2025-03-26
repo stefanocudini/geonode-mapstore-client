@@ -54,7 +54,8 @@ function SaveButton({
     size,
     loading,
     className,
-    dirtyState: dirtyStateProp
+    dirtyState: dirtyStateProp,
+    saveMsgId = "gnviewer.save"
 }) {
     return (
         <Button
@@ -64,7 +65,7 @@ function SaveButton({
             disabled={loading}
             className={className}
         >
-            <Message msgId="save"/>{' '}{loading && <Spinner />}
+            <Message msgId={saveMsgId}/>{' '}{loading && <Spinner />}
         </Button>
     );
 }
