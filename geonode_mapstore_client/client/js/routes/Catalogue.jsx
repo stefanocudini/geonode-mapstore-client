@@ -11,14 +11,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import url from 'url';
 import isArray from 'lodash/isArray';
-import isEmpty from 'lodash/isEmpty';
 import { getMonitoredState } from '@mapstore/framework/utils/PluginsUtils';
 import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
 import PluginsContainer from '@mapstore/framework/components/plugins/PluginsContainer';
 import { createShallowSelector } from '@mapstore/framework/utils/ReselectUtils';
 import useModulePlugins from '@mapstore/framework/hooks/useModulePlugins';
 import { getPlugins } from '@mapstore/framework/utils/ModulePluginsUtils';
-import { getGeoNodeLocalConfig } from '@js/utils/APIUtils';
 
 const urlQuery = url.parse(window.location.href, true).query;
 
@@ -53,6 +51,7 @@ function getPluginsConfiguration(name, pluginsConfig) {
 
 const withRedirect = (Component) => {
     return (props) => {
+        /*
         const { pathname, search } = props.location ?? {};
         const catalogHomeRedirectsTo = getGeoNodeLocalConfig('geoNodeSettings.catalogHomeRedirectsTo');
         const defaultCatalogPage = getGeoNodeLocalConfig('geoNodeSettings.defaultCatalogPage');
@@ -64,6 +63,7 @@ const withRedirect = (Component) => {
             window.location.href = `#/${defaultCatalogPage ? defaultCatalogPage : ""}`;
             return null;
         }
+        */
         return <Component {...props}/>;
     };
 };
@@ -83,7 +83,7 @@ function CatalogueRoute({
     });
 
     const parsedPlugins = useMemo(() => ({ ...loadedPlugins, ...getPlugins(plugins) }), [loadedPlugins]);
-    const className = `gn-catalogue`;
+    const className = `gn-catalogue-page`;
 
     return (
         <>

@@ -21,7 +21,6 @@ import {
     toMapStoreMapConfig,
     parseStyleName,
     canCopyResource,
-    excludeDeletedResources,
     processUploadResponse,
     parseUploadResponse,
     cleanUrl,
@@ -517,13 +516,6 @@ describe('Test Resource Utils', () => {
         expect(canCopyResource({ resource_type: 'dashboard', perms: [] }, user)).toBe(false);
     });
 
-    it('should test excludeDeletedResources', () => {
-        const resources = [{ name: 'test-1', processes: [{ processType: 'deleteResource', output: { status: 'finished' } }] },
-            { name: 'test-2' }];
-
-        expect(excludeDeletedResources(resources)).toEqual([{ name: 'test-2' }]);
-    });
-
     it('should test processUploadResponse', () => {
         const prev = [{
             id: 1,
@@ -700,7 +692,7 @@ describe('Test Resource Utils', () => {
                 alternate: 'name:test',
                 pk: "100"
             };
-            expect(icon).toBe('database');
+            expect(icon.glyph).toBe('database');
             expect(canPreviewed(resource)).toBeTruthy();
             expect(name).toBe('Dataset');
 
@@ -718,7 +710,7 @@ describe('Test Resource Utils', () => {
                 perms: ['view_resourcebase'],
                 pk: "100"
             };
-            expect(icon).toBe('map');
+            expect(icon.glyph).toBe('1-map');
             expect(canPreviewed(resource)).toBeTruthy();
             expect(name).toBe('Map');
             expect(formatMetadataUrl(resource)).toBe('#/metadata/100');
@@ -737,7 +729,7 @@ describe('Test Resource Utils', () => {
                 pk: "100",
                 extension: "pdf"
             };
-            expect(icon).toBe('file');
+            expect(icon.glyph).toBe('file');
             expect(canPreviewed(resource)).toBeTruthy();
             expect(hasPermission(resource)).toBeTruthy();
             expect(name).toBe('Document');
@@ -755,7 +747,7 @@ describe('Test Resource Utils', () => {
                 perms: ['view_resourcebase'],
                 pk: "100"
             };
-            expect(icon).toBe('book');
+            expect(icon.glyph).toBe('geostory');
             expect(canPreviewed(resource)).toBeTruthy();
             expect(name).toBe('GeoStory');
             expect(formatMetadataUrl(resource)).toBe('#/metadata/100');
@@ -771,7 +763,7 @@ describe('Test Resource Utils', () => {
                 perms: ['view_resourcebase'],
                 pk: "100"
             };
-            expect(icon).toBe('dashboard');
+            expect(icon.glyph).toBe('dashboard');
             expect(canPreviewed(resource)).toBeTruthy();
             expect(name).toBe('Dashboard');
             expect(formatMetadataUrl(resource)).toBe('#/metadata/100');
