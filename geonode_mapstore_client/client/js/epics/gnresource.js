@@ -42,7 +42,9 @@ import {
     showSettings
 } from '@mapstore/framework/actions/layers';
 import {
-    setSelectedResource
+    setSelectedResource,
+    setShowDetails,
+    SET_SHOW_DETAILS
 } from '@mapstore/framework/plugins/ResourcesCatalog/actions/resources';
 import {
     setNewResource,
@@ -120,6 +122,7 @@ import { ProcessTypes } from '@js/utils/ResourceServiceUtils';
 import { catalogClose } from '@mapstore/framework/actions/catalog';
 import { VisualizationModes } from '@mapstore/framework/utils/MapTypeUtils';
 import { forceUpdateMapLayout } from '@mapstore/framework/actions/maplayout';
+import { getShowDetails } from '@mapstore/framework/plugins/ResourcesCatalog/selectors/resources';
 import { searchSelector } from '@mapstore/framework/selectors/router';
 
 const FIT_BOUNDS_CONTROL = 'fitBounds';
@@ -577,8 +580,8 @@ const oneOfTheOther = (control) => {
 /**
  * Close open panels on new panel open
  */
-export const closeOpenPanels = (action$, store) => action$.ofType(SET_CONTROL_PROPERTY)
-    .filter((action) => !!action.value)
+export const closeOpenPanels = (action$, store) => action$.ofType(SET_CONTROL_PROPERTY, SET_SHOW_DETAILS)
+    .filter((action) => !!action.value || action.show)
     .switchMap((action) => {
         const state = store.getState();
         const getActions = () => {
@@ -595,8 +598,12 @@ export const closeOpenPanels = (action$, store) => action$.ofType(SET_CONTROL_PR
             if (isDatasetCatalogPanelOpen && isVisualStyleEditorOpen) {
                 setActions.push(setControlProperty('datasetsCatalog', 'enabled', false));
             }
+            const isResourceDetailsOpen = !action.show && getShowDetails(state);
+            if (isResourceDetailsOpen) {
+                setActions.push(setShowDetails(false));
+            }
             const control = oneOfTheOther(action.control);
-            if (control?.control) {
+            if (control?.control || action.show) {
                 if (state.controls?.rightOverlay?.enabled === 'Share') {
                     setActions.push(setControlProperty('rightOverlay', 'enabled', false));
                 } else if (!!state.controls?.[`${control.alternate}`]?.enabled) {
@@ -617,6 +624,10 @@ export const closeDatasetCatalogPanel = (action$, store) => action$.ofType(NEW_M
     .switchMap(() => {
         return Observable.of(setControlProperty('datasetsCatalog', 'enabled', false));
     });
+
+export const closeResourceDetailsOnMapInfoOpen = (action$, store) => action$.ofType(NEW_MAPINFO_REQUEST)
+    .filter(() => isMapInfoOpen(store.getState()) && getShowDetails(store.getState()))
+    .mapTo(setShowDetails(false));
 
 export const gnManageLinkedResource = (action$, store) =>
     action$.ofType(MANAGE_LINKED_RESOURCE)
@@ -741,6 +752,7 @@ export default {
     closeInfoPanelOnMapClick,
     closeOpenPanels,
     closeDatasetCatalogPanel,
+    closeResourceDetailsOnMapInfoOpen,
     gnManageLinkedResource,
     gnZoomToFitBounds,
     gnSelectResourceEpic
