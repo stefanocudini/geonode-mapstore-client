@@ -521,12 +521,6 @@
                     "containerPosition": "header",
                     "leftMenuItems": [
                         {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources"
-                        },
-                        {
                             "type": "plugin",
                             "size": "md",
                             "name": "ResourceDetailsButton"
@@ -691,6 +685,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header",
                     "defaultOpen": true
                 }
@@ -1466,12 +1461,6 @@
                     "containerPosition": "header",
                     "leftMenuItems": [
                         {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources"
-                        },
-                        {
                             "type": "plugin",
                             "size": "md",
                             "name": "ResourceDetailsButton"
@@ -1588,6 +1577,7 @@
                 "mandatory": true,
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header"
                 }
             },
@@ -2199,12 +2189,6 @@
                     "containerPosition": "header",
                     "leftMenuItems": [
                         {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources"
-                        },
-                        {
                             "type": "plugin",
                             "size": "md",
                             "name": "ResourceDetailsButton"
@@ -2281,6 +2265,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header"
                 }
             },
@@ -2395,12 +2380,6 @@
                     "containerPosition": "header",
                     "leftMenuItems": [
                         {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources"
-                        },
-                        {
                             "type": "plugin",
                             "size": "md",
                             "name": "ResourceDetailsButton"
@@ -2502,6 +2481,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header",
                     "defaultOpen": true
                 }
@@ -2537,12 +2517,6 @@
                 "cfg": {
                     "containerPosition": "header",
                     "leftMenuItems": [
-                        {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources"
-                        },
                         {
                             "type": "plugin",
                             "size": "md",
@@ -2633,6 +2607,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header"
                 }
             },
@@ -3195,7 +3170,7 @@
                 "name": "ResourcesFiltersForm",
                 "cfg": {
                     "resourcesGridId": "catalog",
-                    "headerNodeSelector": "#gn-brand-navbar",
+                    "headerNodeSelector": ".gn-main-header",
                     "footerNodeSelector": ".gn-footer",
                     "fields": [
                         {
@@ -3337,6 +3312,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "enableFilters": true,
                     "enablePreview": true,
                     "editingOverlay": true
@@ -3373,13 +3349,6 @@
                 "cfg": {
                     "containerPosition": "header",
                     "leftMenuItems": [
-                        {
-                            "type": "link",
-                            "size": "md",
-                            "href": "#/",
-                            "labelId": "gnviewer.allResources",
-                            "disableIf": "{!!state('resourceParams')?.mapPk}"
-                        },
                         {
                             "type": "link",
                             "href": "{'#/map/' + state('resourceParams')?.mapPk}",
@@ -3465,6 +3434,7 @@
             {
                 "name": "ResourceDetails",
                 "cfg": {
+                    "headerNodeSelector": ".gn-main-header",
                     "containerPosition": "header"
                 }
             },
