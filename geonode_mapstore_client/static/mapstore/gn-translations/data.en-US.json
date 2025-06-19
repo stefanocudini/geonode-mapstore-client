@@ -201,6 +201,8 @@
             "data": "Data",
             "filterBy": "Filter...",
             "addPermissionsEntry": "Add Users / Groups",
+            "group": "Group",
+            "groupPlaceholder": "Select group",
             "groups": "Groups",
             "users": "Users",
             "nonePermission": "None",

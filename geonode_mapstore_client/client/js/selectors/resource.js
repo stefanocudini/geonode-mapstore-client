@@ -334,7 +334,7 @@ export const getResourceDirtyState = (state) => {
         return null;
     }
     const resourceType = state?.gnresource?.type;
-    let metadataKeys = ['title', 'abstract', 'data', 'extent', ...RESOURCE_MANAGEMENT_PROPERTIES_KEYS];
+    let metadataKeys = ['title', 'abstract', 'data', 'extent', 'group', ...RESOURCE_MANAGEMENT_PROPERTIES_KEYS];
     if (resourceType === ResourceTypes.DATASET) {
         metadataKeys = metadataKeys.concat('timeseries');
     }

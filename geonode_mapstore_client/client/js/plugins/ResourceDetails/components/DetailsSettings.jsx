@@ -1,10 +1,13 @@
 import React, { forwardRef } from 'react';
-import { Checkbox } from 'react-bootstrap';
+import { Checkbox, FormGroup, ControlLabel } from 'react-bootstrap';
+
 import Message from '@mapstore/framework/components/I18N/Message';
 import tooltip from '@mapstore/framework/components/misc/enhancers/tooltip';
-import { canAccessPermissions, canManageResourceSettings, RESOURCE_MANAGEMENT_PROPERTIES } from '@js/utils/ResourceUtils';
 import FlexBox from '@mapstore/framework/components/layout/FlexBox';
 import Text from '@mapstore/framework/components/layout/Text';
+import SelectInfiniteScroll from '@mapstore/framework/plugins/ResourcesCatalog/components/SelectInfiniteScroll';
+import { getGroups } from '@js/api/geonode/v2';
+import { canAccessPermissions, canManageResourceSettings, RESOURCE_MANAGEMENT_PROPERTIES } from '@js/utils/ResourceUtils';
 import DetailsPermissions from '@js/plugins/ResourceDetails/containers/Permissions';
 
 const MessageTooltip = tooltip(forwardRef(({children, msgId, ...props}, ref) => {
@@ -20,6 +23,30 @@ const MessageTooltip = tooltip(forwardRef(({children, msgId, ...props}, ref) => 
 function DetailsSettings({ resource, onChange }) {
     return (
         <FlexBox column gap="md" className="gn-details-settings _padding-tb-md">
+            <FlexBox.Fill gap="xs" className="_padding-b-xs">
+                <FormGroup>
+                    <ControlLabel><Message msgId={"gnviewer.group"} /></ControlLabel>
+                    <SelectInfiniteScroll
+                        clearable
+                        disabled={!(resource?.perms || []).includes('change_resourcebase')}
+                        value={{ label: resource?.group?.name, value: resource?.group }}
+                        placeholder={"gnviewer.groupPlaceholder"}
+                        onChange={(selected) => onChange({ group: selected?.value ?? null})}
+                        loadOptions={({ q, ...params }) => getGroups({q, ...params})
+                            .then((response) => {
+                                return {
+                                    ...response,
+                                    results: (response?.groups ?? [])
+                                        .map((item) => ({...item, selectOption: {
+                                            value: item.group,
+                                            label: item.group.name
+                                        }}))
+                                };
+                            })
+                        }
+                    />
+                </FormGroup>
+            </FlexBox.Fill>
             {canAccessPermissions(resource) && <DetailsPermissions resource={resource} />}
             {canManageResourceSettings(resource) && (
                 <FlexBox column gap="xs">

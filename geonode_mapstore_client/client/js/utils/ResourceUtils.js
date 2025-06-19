@@ -8,15 +8,15 @@
 
 import uuid from 'uuid';
 import url from 'url';
-import isEmpty from 'lodash/isEmpty';
-import omit from 'lodash/omit';
+import { isEmpty, uniqBy, omit, orderBy, isString, isObject } from 'lodash';
+
+import { isImageServerUrl } from '@mapstore/framework/utils/ArcGISUtils';
 import { getConfigProp, convertFromLegacy, normalizeConfig } from '@mapstore/framework/utils/ConfigUtils';
+import { excludeGoogleBackground, extractTileMatrixFromSources, ServerTypes } from '@mapstore/framework/utils/LayersUtils';
+
 import { getGeoNodeLocalConfig, parseDevHostname } from '@js/utils/APIUtils';
 import { ProcessTypes, ProcessStatus } from '@js/utils/ResourceServiceUtils';
-import { uniqBy, orderBy, isString, isObject } from 'lodash';
-import { excludeGoogleBackground, extractTileMatrixFromSources, ServerTypes } from '@mapstore/framework/utils/LayersUtils';
 import { determineResourceType } from '@js/utils/FileUtils';
-import { isImageServerUrl } from '@mapstore/framework/utils/ArcGISUtils';
 
 /**
 * @module utils/ResourceUtils

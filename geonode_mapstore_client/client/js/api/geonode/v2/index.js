@@ -382,11 +382,13 @@ export const getUsers = ({
     q,
     page = 1,
     pageSize = 20,
+    config,
     ...params
 } = {}) => {
     return axios.get(
         getEndpointUrl(USERS),
         {
+            ...config,
             params: {
                 ...params,
                 ...(q && {
@@ -411,11 +413,13 @@ export const getGroups = ({
     q,
     page = 1,
     pageSize = 20,
+    config,
     ...params
 } = {}) => {
     return axios.get(
         getEndpointUrl(GROUPS),
         {
+            ...config,
             params: {
                 ...params,
                 ...(q && {

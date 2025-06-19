@@ -202,6 +202,8 @@
             "filterBy": "Filtro ...",
             "addPermissionsEntry": "Agregar usuarios / grupos",
             "groups": "Grupos",
+            "group": "Grupo",
+            "groupPlaceholder": "Seleccionar grupo",
             "users": "Usuarios",
             "nonePermission": "Ninguno",
             "viewPermission": "Ver",

@@ -204,9 +204,10 @@ export const gnSaveContent = (action$, store) =>
             const extent = getExtentPayload(state, contentType);
             const body = {
                 'title': action.metadata.name,
-                ...(RESOURCE_MANAGEMENT_PROPERTIES_KEYS.reduce((acc, key) => {
+                ...([...RESOURCE_MANAGEMENT_PROPERTIES_KEYS, 'group'].reduce((acc, key) => {
                     if (currentResource?.[key] !== undefined) {
-                        acc[key] = !!currentResource[key];
+                        const value = typeof currentResource[key] === 'boolean' ? !!currentResource[key] : currentResource[key];
+                        acc[key] = value;
                     }
                     return acc;
                 }, {})),
@@ -312,6 +313,8 @@ export const gnSaveDirectContent = (action$, store) =>
             const resourceId = mapInfo?.id || getResourceId(state);
             const { geoLimits } = getPermissionsPayload(state);
 
+            // resource information should be saved in a synchronous manner
+            // i.e update resource data followed by permissions
             return Observable.defer(() => axios.all([
                 getResourceByPk(resourceId),
                 ...(geoLimits
