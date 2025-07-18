@@ -403,7 +403,6 @@ export default createPlugin('ResourceDetails', {
                     <Component
                         onClick={handleClick}
                         glyph="details"
-                        iconType="glyphicon"
                         square
                         labelId="resourcesCatalog.viewResourceProperties"
                     />
@@ -460,7 +459,6 @@ export default createPlugin('ResourceDetails', {
                     <Component
                         onClick={handleClick}
                         glyph="details"
-                        iconType="glyphicon"
                         square
                         labelId="resourcesCatalog.viewResourceProperties"
                     />

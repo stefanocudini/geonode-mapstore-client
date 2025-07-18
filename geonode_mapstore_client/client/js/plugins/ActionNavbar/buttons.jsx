@@ -20,7 +20,6 @@ import {
 import { Dropdown, MenuItem, Glyphicon } from 'react-bootstrap';
 import Message from '@mapstore/framework/components/I18N/Message';
 import Button from '@mapstore/framework/components/layout/Button';
-import Icon from '@js/components/Icon';
 import tooltip from '@mapstore/framework/components/misc/enhancers/tooltip';
 import { openQueryBuilder } from '@mapstore/framework/actions/layerFilter';
 import { getSelectedLayer } from '@mapstore/framework/selectors/layers';
@@ -59,7 +58,7 @@ export const FullScreenActionButton = connect(createSelector([
             size={size}
             onClick={() => onClick(!enabled)}
         >
-            {showText ? label : <Icon glyph={enabled ? "expand" : "expand"} />}
+            {showText ? label : <Glyphicon glyph={"resize-full"} />}
         </FullScreenButton>
     );
 });
