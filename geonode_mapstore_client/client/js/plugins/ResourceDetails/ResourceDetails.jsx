@@ -73,7 +73,7 @@ import Message from '@mapstore/framework/components/I18N/Message';
  *                  {
  *                      "type": "query",
  *                      "labelId": "gnviewer.resourceType",
- *                      "value": "{context.get(state('gnResourceData'), 'resource_type')}",
+ *                      "valueId": "{'gnviewer.' + context.get(state('gnResourceData'), 'resource_type')}",
  *                      "pathname": "/",
  *                      "query": {
  *                          "f": "{context.get(state('gnResourceData'), 'resource_type')}"
@@ -130,7 +130,7 @@ function ResourceDetailsPanel({
                 {
                     "type": "query",
                     "labelId": "gnviewer.resourceType",
-                    "value": "{context.get(state('gnResourceData'), 'resource_type')}",
+                    "valueId": "{'gnviewer.' + context.get(state('gnResourceData'), 'resource_type')}",
                     "pathname": "/",
                     "query": {
                         "f": "{context.get(state('gnResourceData'), 'resource_type')}"
