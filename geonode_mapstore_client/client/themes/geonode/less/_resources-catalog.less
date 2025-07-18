@@ -129,3 +129,28 @@
         }
     }
 }
+
+:has(.ms-resources-filter._visible) {
+    .gn-resource-page-catalog-section:not(._panel) {
+        margin-left: var(--ms-resources-filter-width);
+    }
+}
+
+:has(.ms-resource-detail._visible) {
+    .gn-resource-page-catalog-section:not(._panel) {
+        width: calc(100% - var(--ms-resource-detail-width));
+    }
+    &:has(.ms-resources-filter._visible) {
+        .gn-resource-page-catalog-section:not(._panel) {
+            width: calc(100% - var(--ms-resource-detail-width) - var(--ms-resources-filter-width));
+        }
+    }
+}
+:has(.gn-resource-page-catalog) {
+    // ensure ms-container has higher z-index to correctly the overlay components (filters and details)
+    // if rendered inside the gn-resource-page-catalog page
+    #ms-container {
+        position: relative;
+        z-index: 15;
+    }
+}
