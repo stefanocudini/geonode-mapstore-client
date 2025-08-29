@@ -23,9 +23,9 @@ const useUpload = ({
     const [completed, setCompleted] = useState({});
     const [progress, setProgress] = useState({});
 
-    const getUploadRequestPayload = (upload) => {
+    const getUploadRequestPayload = (upload, action) => {
         const bodyConfig = api?.body?.[upload?.type];
-        const payload = Object.keys(bodyConfig).reduce((acc, key) => {
+        let payload = Object.keys(bodyConfig).reduce((acc, key) => {
             return {
                 ...acc,
                 [key]: isFunction(bodyConfig[key])
@@ -33,6 +33,13 @@ const useUpload = ({
                     : bodyConfig[key]
             };
         }, {});
+        const actionToUse = action ? action : payload?.action;
+        const extraBody = api?.bodyExtra?.[actionToUse]?.[upload?.type] || {};
+        payload = {
+            ...payload,
+            ...extraBody,
+            action: actionToUse
+        };
         if (upload.files) {
             Object.keys(upload.files).forEach((ext) => {
                 payload[`${ext}_file`] = upload.files[ext];
@@ -64,7 +71,7 @@ const useUpload = ({
             }));
             uploadIds.forEach((uploadId) => sources[uploadId].cancel());
         },
-        uploadRequest: (uploads) => {
+        uploadRequest: (uploads, action) => {
             if (!loading) {
                 setLoading(true);
                 setErrors({});
@@ -76,7 +83,7 @@ const useUpload = ({
                         onUploadProgress: onUploadProgress(upload.id),
                         cancelToken: sources[upload.id].token
                     };
-                    const payload = getUploadRequestPayload(upload);
+                    const payload = getUploadRequestPayload(upload, action);
                     return axios[api.method || 'post'](api.url, payload, config)
                         .then(({ data }) => ({ status: 'success', data, id: upload.id, upload }))
                         .catch((error) => {
