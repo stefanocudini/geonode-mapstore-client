@@ -195,3 +195,14 @@ export const CATALOGUE_ROUTES = [
         hash: "#/upload/document"
     }
 ];
+
+export const REPROJECTION_ROUTES = [
+    {
+        name: 'reprojection_tool',
+        path: [
+            '/reprojection-tool'
+        ],
+        component: appRouteComponentTypes.VIEWER,
+        shouldNotRequestResources: true
+    }
+];

@@ -3686,6 +3686,16 @@
                     "resourceType": "document"
                 }
             }
+        ],
+        "reprojection_tool": [
+            {
+                "name": "ReprojectionTool",
+                "cfg": {
+                    "defaultCrsOrigin": "4326",
+                    "defaultCrsDestin": "4326",
+                    "defaultInput": "points"
+                }
+            }
         ]
     }
 }

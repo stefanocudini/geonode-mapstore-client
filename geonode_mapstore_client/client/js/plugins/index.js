@@ -31,6 +31,9 @@ import {
     ResourcesFiltersFormPlugin
 } from '@mapstore/framework/plugins/ResourcesCatalog';
 
+import ReprojectionToolPlugin from '@js/plugins/ReprojectionTool';
+
+
 let epicsNamesToExclude = [
     'loadGeostoryEpic',
     'reloadGeoStoryOnLoginLogout',
@@ -82,6 +85,7 @@ export const plugins = {
     ResourcesGridPlugin,
     FavoritesPlugin,
     ResourcesFiltersFormPlugin,
+    ReprojectionToolPlugin,
     IsochronePlugin: Isochrone,
     ItineraryPlugin: Itinerary,
     SecurityPopupPlugin: SecurityPopup,
