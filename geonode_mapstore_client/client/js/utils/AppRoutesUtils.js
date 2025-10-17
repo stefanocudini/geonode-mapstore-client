@@ -193,16 +193,10 @@ export const CATALOGUE_ROUTES = [
         component: appRouteComponentTypes.DOCUMENT_UPLOAD,
         protectedRoute: true,
         hash: "#/upload/document"
-    }
-];
-
-export const REPROJECTION_ROUTES = [
+    },
     {
         name: 'reprojection_tool',
-        path: [
-            '/reprojection-tool'
-        ],
-        component: appRouteComponentTypes.VIEWER,
-        shouldNotRequestResources: true
+        path: ['/reprojection'],
+        component: appRouteComponentTypes.VIEWER
     }
 ];

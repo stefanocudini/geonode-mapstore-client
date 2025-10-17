@@ -38,43 +38,21 @@ const connectReprojectionTool = connect(
 );
 
 const ReprojectionTool = ({
-    match,
-    preview,
-    setPreview,
     labelId = 'gnviewer.reprojectionTool',
-    capitalizeFieldTitle = true
 }) => {
-    const { params } = match || {};
-    const pk = params?.pk;
-    const customProp = encodeURIComponent(JSON.stringify({capitalizeTitle: capitalizeFieldTitle}));
     return (
-        <Portal>
-            <ResizableModal
-                title={<Message msgId={labelId} />}
-                show={preview}
-                size="lg"
-                clickOutEnabled={false}
-                modalClassName="gn-simple-dialog"
-                onClose={() => setPreview(false)}
-            >
-                <iframe style={{ border: 'none', position: 'absolute', width: '100%', height: '100%' }} src={`/metadata/${pk}/embed?props=${customProp}`} />
-            </ResizableModal>
-        </Portal>
+        <div>REPROJECTION TOOL</div>
     );
 };
 
-const ReprojectionToolPlugin = connectReprojectionTool(withRouter(ReprojectionTool));
+const ReprojectionToolPlugin = connectReprojectionTool(ReprojectionTool);
 
 export default createPlugin('ReprojectionTool', {
     component: ReprojectionToolPlugin,
     containers: {
-        // ActionNavbar: {
-        //     name: 'ReprojectionTool',
-        //     //TODO button to open tool
-        // }
     },
     epics: {},
-    reducers: {
-        reprojection
-    }
+    // reducers: {
+    //     reprojection
+    // }
 });
