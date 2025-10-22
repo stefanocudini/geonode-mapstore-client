@@ -22,6 +22,8 @@ import {
 
 import reprojection from './reducers/reprojection';
 
+import {inputPoints} './components/inputPoints';
+
 const connectReprojectionTool = connect(
     createSelector([
         state => state?.reprojection?.sourceCRS,

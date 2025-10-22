@@ -3692,7 +3692,7 @@
                 "name": "ReprojectionTool",
                 "cfg": {
                     "defaultCrsOrigin": "4326",
-                    "defaultCrsDestin": "4326",
+                    "defaultCrsTarget": "4326",
                     "defaultInput": "points"
                 }
             }
