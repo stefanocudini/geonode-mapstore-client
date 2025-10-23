@@ -9,20 +9,19 @@ import React from 'react';
 import { createPlugin } from '@mapstore/framework/utils/PluginsUtils';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { withRouter } from 'react-router';
-import isEqual from 'lodash/isEqual';
-import Message from '@mapstore/framework/components/I18N/Message';
-import ResizableModal from '@mapstore/framework/components/misc/ResizableModal';
-import Portal from '@mapstore/framework/components/misc/Portal';
-import Button from '@mapstore/framework/components/layout/Button';
 
-import {
-    setReprojec
-} from './actions/reprojection';
+// import isEqual from 'lodash/isEqual';
+// import Message from '@mapstore/framework/components/I18N/Message';
+// import ResizableModal from '@mapstore/framework/components/misc/ResizableModal';
+// import Portal from '@mapstore/framework/components/misc/Portal';
+// import Button from '@mapstore/framework/components/layout/Button';
 
-import reprojection from './reducers/reprojection';
+// import {
+//     setReprojection
+// } from './actions/reprojection';
+// import reprojection from './reducers/reprojection';
 
-import {inputPoints} './components/inputPoints';
+import InputPoints from './components/InputPoints';
 
 const connectReprojectionTool = connect(
     createSelector([
@@ -35,15 +34,24 @@ const connectReprojectionTool = connect(
         geom
     })),
     {
-        //TODO maybe setPreview: setReprojectionPreview
+        // TODO maybe setPreview: setReprojectionPreview
     }
 );
 
 const ReprojectionTool = ({
-    labelId = 'gnviewer.reprojectionTool',
 }) => {
     return (
-        <div>REPROJECTION TOOL</div>
+        <>
+            <div>REPROJECTION TOOL</div>
+            <div>
+                <label className="control-label">Sources coordinates</label>
+                <InputPoints
+                    // points={[[45, 10]]}
+                    // format="decimal"
+                    // onChange={(points) => console.log(points)}
+                />
+            </div>
+        </>
     );
 };
 
@@ -53,7 +61,7 @@ export default createPlugin('ReprojectionTool', {
     component: ReprojectionToolPlugin,
     containers: {
     },
-    epics: {},
+    epics: {}
     // reducers: {
     //     reprojection
     // }
