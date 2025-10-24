@@ -10,6 +10,8 @@ import { createPlugin } from '@mapstore/framework/utils/PluginsUtils';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
+
 // import Message from '@mapstore/framework/components/I18N/Message';
 
 // import {
@@ -45,36 +47,38 @@ const ReprojectionTool = ({
         <div className="reprojection-tool">
             <div className="reprojection-container">
                 <div className="row">
-                    <div className="reprojection-header mb-4">
+                    <div className="reprojection-header">
                         <h3>Reprojection Tool</h3>
                         <p className="text-muted">Transform coordinates between different coordinate reference systems</p>
                     </div>
                 </div>
-                <div className="row mb-3">
-                    <div className="col-6">
-                        <label htmlFor="source-crs">Source CRS</label>
-                        <select id="source-crs" className="form-control">
-                            <option value="">Select Source CRS</option>
-                            {CRS_OPTIONS.map(option => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="col-6">
-                        <label htmlFor="target-crs">Target CRS</label>
-                        <select id="target-crs" className="form-control">
-                            <option value="">Select Target CRS</option>
-                            {CRS_OPTIONS.map(option => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                <div className="row" style={{ display: 'flex', gap: '5px' }}>
+                    <Form className="reprojection-coordinates">
+                        <div className="col-6">
+                            <label htmlFor="source-crs">Source CRS</label>
+                            <select id="source-crs" className="form-control">
+                                <option value="">Select Source CRS</option>
+                                {CRS_OPTIONS.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="col-6">
+                            <label htmlFor="target-crs">Target CRS</label>
+                            <select id="target-crs" className="form-control">
+                                <option value="">Select Target CRS</option>
+                                {CRS_OPTIONS.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </Form>
                 </div>
-                <div className="row w-80">
+                <div className="row">
                     <div className="nav nav-tabs" role="tablist">
                         <a className="nav-item nav-link active" id="coordinates-tab" data-toggle="tab" href="#coordinates" role="tab" aria-controls="coordinates" aria-selected="true">
                             Source Coordinates
@@ -84,7 +88,7 @@ const ReprojectionTool = ({
                         </a>
                     </div>
                     <div className="tab-content">
-                        <div className="tab-pane fade show active" id="coordinates" role="tabpanel" aria-labelledby="coordinates-tab">
+                        <div className="tab-pane show active" id="coordinates" role="tabpanel" aria-labelledby="coordinates-tab">
                             <div className="p-3">
                                 <InputCoordinates
                                     coordinates={[[45, 12]]}

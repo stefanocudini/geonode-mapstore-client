@@ -6,8 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { useState } from 'react';
-import { InputGroup } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 import Message from '@mapstore/framework/components/I18N/Message';
+//import MessageHtml from '@mapstore/framework/components/I18N/HTML';
 
 //TODO Annotations use  client/MapStore2/web/client/components/misc/coordinateeditors/editors/CRSCoordinateEditor.jsx
 //import CRSCoordinateEditor from '@mapstore/framework/components/misc/coordinateeditors/editors/CRSCoordinateEditor';
@@ -25,14 +26,14 @@ const InputCoordinates = ({
 }) => {
     const [currentCoords, setCurrentCoords] = useState(coordinates);
 
-    function handleChange(newPoint) {
-        const updatedValues = [...currentCoords, newPoint];
+    function handleChange(newCoord) {
+        const updatedValues = [...currentCoords, newCoord];
         setCurrentCoords(updatedValues);
         onChange(updatedValues);
     }
 
     return (
-        <div className="reprojection-coordinates">
+        <Form className="reprojection-coordinates" style={{ display: 'flex', gap: '5px' }}>
             <div className="input-group-container">
                 <InputGroup>
                     <InputGroup.Addon><Message msgId="latitude"/></InputGroup.Addon>
@@ -55,7 +56,7 @@ const InputCoordinates = ({
                     />
                 </InputGroup>
             </div>
-        </div>
+        </Form>
     );
 };
 
