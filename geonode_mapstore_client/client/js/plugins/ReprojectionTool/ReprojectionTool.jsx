@@ -17,7 +17,7 @@ import { createSelector } from 'reselect';
 // } from './actions/reprojection';
 // import reprojection from './reducers/reprojection';
 
-import InputPoints from './components/InputPoints';
+import InputCoordinates from './components/InputCoordinates';
 
 const connectReprojectionTool = connect(
     createSelector([
@@ -86,10 +86,10 @@ const ReprojectionTool = ({
                     <div className="tab-content">
                         <div className="tab-pane fade show active" id="coordinates" role="tabpanel" aria-labelledby="coordinates-tab">
                             <div className="p-3">
-                                <InputPoints
-                                    points={[[45, 12]]}
+                                <InputCoordinates
+                                    coordinates={[[45, 12]]}
                                     // format="decimal"
-                                    // onChange={(points) => console.log(points)}
+                                    // onChange={(coordinates) => console.log(coordinates)}
                                 />
                             </div>
                         </div>
