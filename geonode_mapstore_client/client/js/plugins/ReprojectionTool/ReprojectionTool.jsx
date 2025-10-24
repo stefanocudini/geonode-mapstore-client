@@ -10,16 +10,19 @@ import { createPlugin } from '@mapstore/framework/utils/PluginsUtils';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, InputGroup,Tabs,Tab } from 'react-bootstrap';
 
 // import Message from '@mapstore/framework/components/I18N/Message';
 
-// import {
-//     setReprojection
-// } from './actions/reprojection';
+import {
+    setReprojectSourceCrs,
+    setReprojectTargetCrs,
+    setReprojectGeom
+} from './actions/reprojection';
 // import reprojection from './reducers/reprojection';
 
 import InputCoordinates from './components/InputCoordinates';
+import InputCrs from './components/InputCrs';
 
 const connectReprojectionTool = connect(
     createSelector([
@@ -32,77 +35,64 @@ const connectReprojectionTool = connect(
         geom
     })),
     {
-        // TODO maybe setPreview: setReprojectionPreview
+        setSourceCrs: setReprojectSourceCrs,
+        setTargetCrs: setReprojectTargetCrs,
+        setGeom: setReprojectGeom
     }
 );
 
 const ReprojectionTool = ({
+    setSourceCrs,
+    setTargetCrs,
+    setGeom
 }) => {
     const CRS_OPTIONS = [
         { value: "EPSG:4326", label: "EPSG:4326 (WGS84)" },
         { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
     ];
 
+    const handleCrsChange = ({ crsOrigin, crsTarget }) => {
+        console.log(`CRS origin changed to ${crsOrigin}`);
+        console.log(`CRS target changed to ${crsTarget}`);
+        setSourceCrs(crsOrigin);
+        setTargetCrs(crsTarget);
+    }
+
     return (
         <div className="reprojection-tool">
-            <div className="reprojection-container">
-                <div className="row">
+            <div className="container-fluid d-flex justify-content-center" style={{ maxWidth: '800px' }}>
+                <div className="row mb-4 p-20">
                     <div className="reprojection-header">
                         <h3>Reprojection Tool</h3>
                         <p className="text-muted">Transform coordinates between different coordinate reference systems</p>
                     </div>
                 </div>
-                <div className="row" style={{ display: 'flex', gap: '5px' }}>
-                    <Form className="reprojection-coordinates">
-                        <div className="col-6">
-                            <label htmlFor="source-crs">Source CRS</label>
-                            <select id="source-crs" className="form-control">
-                                <option value="">Select Source CRS</option>
-                                {CRS_OPTIONS.map(option => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-6">
-                            <label htmlFor="target-crs">Target CRS</label>
-                            <select id="target-crs" className="form-control">
-                                <option value="">Select Target CRS</option>
-                                {CRS_OPTIONS.map(option => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </Form>
+                <div className="row mb-4 p-20">
+                    <InputCrs
+                        crsOrigin={CRS_OPTIONS[0].value}
+                        crsTarget={CRS_OPTIONS[1].value}
+                        onChange={handleCrsChange}
+                    />
+                    <br/><br/>
                 </div>
-                <div className="row">
-                    <div className="nav nav-tabs" role="tablist">
-                        <a className="nav-item nav-link active" id="coordinates-tab" data-toggle="tab" href="#coordinates" role="tab" aria-controls="coordinates" aria-selected="true">
-                            Source Coordinates
-                        </a>
-                        <a className="nav-item nav-link" id="results-tab" data-toggle="tab" href="#results" role="tab" aria-controls="results" aria-selected="false">
-                            Source Layer
-                        </a>
-                    </div>
-                    <div className="tab-content">
-                        <div className="tab-pane show active" id="coordinates" role="tabpanel" aria-labelledby="coordinates-tab">
-                            <div className="p-3">
+                <div className="row mb-4 p-20">
+                    <Tabs defaultActiveKey="coordinates" id="reprojection-tabs">
+                        <Tab eventKey="coordinates" title="Source Coordinates">
+                            <div className="p-20">
                                 <InputCoordinates
                                     coordinates={[[45, 12]]}
                                     // format="decimal"
                                     // onChange={(coordinates) => console.log(coordinates)}
                                 />
                             </div>
-                        </div>
-                        <div className="tab-pane fade" id="results" role="tabpanel" aria-labelledby="results-tab">
-                            <div className="p-3">
-                                [upload file]
+                        </Tab>
+                        <Tab eventKey="layer" title="Source Layer">
+                            <br/><br/>
+                            <div className="p-20">
+                                <label htmlFor="file-upload">Drop File Layer to Upload</label>
                             </div>
-                        </div>
-                    </div>
+                        </Tab>
+                    </Tabs>
                 </div>
             </div>
         </div>
@@ -115,7 +105,7 @@ export default createPlugin('ReprojectionTool', {
     component: ReprojectionToolPlugin,
     containers: {
     },
-    epics: {}
+    epics: {},
     // reducers: {
     //     reprojection
     // }
