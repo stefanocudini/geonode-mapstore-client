@@ -14,36 +14,17 @@ import {
     rawDataOutput,
     responseForm
 } from '@mapstore/framework/observables/wps/common';
-import {executeProcessXML} from '@mapstore/framework/observables/wps/execute';
+import { executeProcessXML } from '@mapstore/framework/observables/wps/execute';
 
-
-export const reprojectXML = ({
-    geometry,
-    sourceCrs,
-    targetCrs,
-}) => {
-    const payload = [
-        processParameter('sourceCrs', processData(literalData(sourceCrs))),
-        processParameter('targetCrs', processData(literalData(targetCrs))),
-        processParameter('geom', processData(complexData(cdata(geometry), "application/wkt"))),
-    ];
-    return executeProcessXML(
-        'geo:reproject',
-        payload,
-        responseForm(
-            rawDataOutput('result', "application/json")
-        )
-    );
-};
-
+//reproject list of points, geometry is WKT format multipoint
 export const reprojectGeometryXML = ({
-    geometry,
     sourceCrs,
     targetCrs,
+    geometry
 }) => {
     const payload = [
-        processParameter('sourceCrs', processData(literalData(sourceCrs))),
-        processParameter('targetCrs', processData(literalData(targetCrs))),
+        processParameter('sourceCRS', processData(literalData(sourceCrs))),
+        processParameter('targetCRS', processData(literalData(targetCrs))),
         processParameter('geometry', processData(complexData(cdata(geometry), "application/wkt"))),
     ];
     return executeProcessXML(
@@ -54,6 +35,28 @@ export const reprojectGeometryXML = ({
         )
     );
 };
+
+
+
+export const reprojectXML = ({
+    sourceCrs,
+    targetCrs,
+    features
+}) => {
+    const payload = [
+        processParameter('sourceCRS', processData(literalData(sourceCrs))),
+        processParameter('targetCRS', processData(literalData(targetCrs))),
+        //features as reference
+    ];
+    return executeProcessXML(
+        'gs:reproject',
+        payload,
+        responseForm(
+            rawDataOutput('result', "application/wkt")
+        )
+    );
+};
+
 
 //gs:ReprojectGeometry
 // <wps:Execute service="WPS" version="1.0.0"
