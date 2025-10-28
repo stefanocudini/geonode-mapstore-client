@@ -13,7 +13,8 @@ import CoordinateEntry from '@mapstore/framework/components/misc/coordinateedito
 
 const InputCoordinates = ({
     coordinates = [
-        { x: 11, y: 45 }
+        {x: 11, y: 46},
+        {x: 11.5, y: 46.5}
     ],
     format =  'decimal',
     onChange

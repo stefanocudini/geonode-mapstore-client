@@ -52,7 +52,8 @@ const ReprojectionTool = ({
     const wpsUrl = '/geoserver/wps';
     const executeOptions = {};
 
-    const CRS_OPTIONS = [
+    //TODO get from GetCapabilities at mount
+    const CRS_LIST = [
         { value: "EPSG:4326", label: "EPSG:4326 (WGS84)" },
         { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
     ];
@@ -61,6 +62,12 @@ const ReprojectionTool = ({
     const [targetCrs, setTargetCrs] = useState('EPSG:3857');
     const [geometry, setGeometry] = useState('');
     const [result, setResult] = useState('');
+
+    const coordinatesToWKT = (coords) => {
+        // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
+        const wkt = `MULTIPOINT(${coordinates.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
+        return wkt;
+    }
 
     const handleChangeCrs = ({ crsOrigin, crsTarget }) => {
         console.log(`CRS origin changed to ${crsOrigin}`);
@@ -71,9 +78,7 @@ const ReprojectionTool = ({
 
     const handleChangeCoordinates = (coordinates) => {
         console.log('Coordinates changed:', coordinates);
-        // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
-        const wkt = `MULTIPOINT(${coordinates.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
-        setGeometry(wkt);
+        setGeometry(coordinates);
     }
 
     const handleProcess = () => {
@@ -85,7 +90,7 @@ const ReprojectionTool = ({
             reprojectGeometryXML({
                 sourceCrs,
                 targetCrs,
-                geometry
+                geometry: coordinatesToWKT(geometry)
             }),
             executeOptions, {
                 headers: {'Content-Type': 'application/xml', 'Accept': `application/xml, application/json`}
@@ -93,7 +98,7 @@ const ReprojectionTool = ({
         .toPromise()
         .then(response => {
             console.log('response from WPS reprojectGeometry', response);
-            //setResult(response);
+            setResult(response);
         })
         .catch(() => null);  
     }
@@ -109,8 +114,8 @@ const ReprojectionTool = ({
                 </div>
                 <div className="row mb-4 p-20">
                     <InputCrs
-                        crsOrigin={CRS_OPTIONS[0].value}
-                        crsTarget={CRS_OPTIONS[1].value}
+                        crsOrigin={CRS_LIST[0].value}
+                        crsTarget={CRS_LIST[1].value}
                         onChange={handleChangeCrs}
                     />
                     <br/><br/>
@@ -121,7 +126,7 @@ const ReprojectionTool = ({
                         <Tab eventKey="coordinates" title="Source Coordinates">
                             <div className="p-20">
                                 <InputCoordinates
-                                    coordinates={[[45, 12]]}
+                                    //coordinates={[{x:11, y:46},{x:11.5, y:46.5}]}
                                     // format="decimal"
                                     onChange={handleChangeCoordinates}
                                 />
