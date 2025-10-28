@@ -65,6 +65,7 @@ const ReprojectionTool = ({
         setGeom(wkt);
     }
 
+
     return (
         <div className="reprojection-tool">
             <div className="container-fluid d-flex justify-content-center" style={{ maxWidth: '800px' }}>
@@ -100,6 +101,14 @@ const ReprojectionTool = ({
                             </div>
                         </Tab>
                     </Tabs>
+                </div>
+                <div className="row mb-4 p-20">
+                    <button 
+                        className="btn btn-primary" 
+                        onClick={handleProcess}
+                    >
+                        RUN
+                    </button>
                 </div>
             </div>
         </div>
