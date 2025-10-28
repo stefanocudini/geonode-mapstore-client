@@ -60,12 +60,12 @@ const ReprojectionTool = ({
 
     const [sourceCrs, setSourceCrs] = useState('EPSG:4326');
     const [targetCrs, setTargetCrs] = useState('EPSG:3857');
-    const [geometry, setGeometry] = useState('');
+    const [coordinates, setCoordinates] = useState([{x:11.1, y:46.1},{x:11.2, y:46.2}]);
     const [result, setResult] = useState('');
 
-    const coordinatesToWKT = (coords) => {
+    const coordinatesToWKT = (coords = []) => {
         // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
-        const wkt = `MULTIPOINT(${coordinates.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
+        const wkt = `MULTIPOINT(${coords.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
         return wkt;
     }
 
@@ -78,7 +78,7 @@ const ReprojectionTool = ({
 
     const handleChangeCoordinates = (coordinates) => {
         console.log('Coordinates changed:', coordinates);
-        setGeometry(coordinates);
+        setCoordinates(coordinates);
     }
 
     const handleProcess = () => {
@@ -90,10 +90,13 @@ const ReprojectionTool = ({
             reprojectGeometryXML({
                 sourceCrs,
                 targetCrs,
-                geometry: coordinatesToWKT(geometry)
+                geometry: coordinatesToWKT(coordinates)
             }),
             executeOptions, {
-                headers: {'Content-Type': 'application/xml', 'Accept': `application/xml, application/json`}
+                headers: {
+                    'Content-Type': 'application/xml',
+                    'Accept': `application/xml, application/json`
+                }
             })
         .toPromise()
         .then(response => {
@@ -126,8 +129,7 @@ const ReprojectionTool = ({
                         <Tab eventKey="coordinates" title="Source Coordinates">
                             <div className="p-20">
                                 <InputCoordinates
-                                    //coordinates={[{x:11, y:46},{x:11.5, y:46.5}]}
-                                    // format="decimal"
+                                    coordinates={coordinates}
                                     onChange={handleChangeCoordinates}
                                 />
                             </div>
@@ -142,12 +144,7 @@ const ReprojectionTool = ({
                 </div>
                 <div className="row mb-4 p-20">
                     <br/>
-                    <button 
-                        className="btn btn-primary" 
-                        onClick={handleProcess}
-                    >
-                        RUN
-                    </button>
+                    <button className="btn btn-primary" onClick={handleProcess}>RUN</button>
                 </div>
                 <div className="row mb-4 p-20">
                     {result && (

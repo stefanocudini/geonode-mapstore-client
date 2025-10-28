@@ -12,11 +12,8 @@ import Message from '@mapstore/framework/components/I18N/Message';
 import CoordinateEntry from '@mapstore/framework/components/misc/coordinateeditors/CoordinateEntry';
 
 const InputCoordinates = ({
-    coordinates = [
-        {x: 11, y: 46},
-        {x: 11.5, y: 46.5}
-    ],
-    format =  'decimal',
+    coordinates = [],
+    format = 'decimal',
     onChange
 }) => {
     const [currentCoords, setCurrentCoords] = useState(coordinates);
@@ -36,7 +33,7 @@ const InputCoordinates = ({
                         format={format}
                         coordinate="lat"
                         value={currentCoords[0].y}
-                        // onChange={(dd) => handleChange([dd, currentCoords[1]])}
+                        onChange={(dd) => handleChange([dd, currentCoords[1]])}
                     />
                 </InputGroup>
             </div>
@@ -47,7 +44,7 @@ const InputCoordinates = ({
                         format={format}
                         coordinate="lon"
                         value={currentCoords[0].x}
-                        // onChange={(dd) => handleChange([currentCoords[0], dd])}
+                        onChange={(dd) => handleChange([currentCoords[0], dd])}
                     />
                 </InputGroup>
             </div>
