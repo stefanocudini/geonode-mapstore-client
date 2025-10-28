@@ -44,39 +44,16 @@ export const reprojectGeometryXML = ({
     const payload = [
         processParameter('sourceCrs', processData(literalData(sourceCrs))),
         processParameter('targetCrs', processData(literalData(targetCrs))),
-        processParameter('geom', processData(complexData(cdata(geometry), "application/wkt"))),
+        processParameter('geometry', processData(complexData(cdata(geometry), "application/wkt"))),
     ];
     return executeProcessXML(
-        'geo:reproject',
+        'gs:reprojectGeometry',
         payload,
         responseForm(
-            rawDataOutput('result', "application/json")
+            rawDataOutput('result', "application/wkt")
         )
     );
 };
-
-//gs:Reproject
-// <wps:Execute service="WPS" version="1.0.0"
-//   xmlns:wps="http://www.opengis.net/wps/1.0.0"
-//   xmlns:ows="http://www.opengis.net/ows/1.1"
-//   xmlns:xlink="http://www.w3.org/1999/xlink"
-//   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-//   xsi:schemaLocation="http://www.opengis.net/wps/1.0.0
-//   http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
-//   <ows:Identifier>gs:Reproject</ows:Identifier>
-//   <wps:DataInputs>
-//     <wps:Input>
-//       <ows:Identifier>features</ows:Identifier>
-//       <wps:Reference xlink:href="http://geoserver/wfs?...typename=mylayer"/>
-//     </wps:Input>
-//     <wps:Input>
-//       <ows:Identifier>targetCRS</ows:Identifier>
-//       <wps:Data>
-//         <wps:LiteralData>EPSG:4326</wps:LiteralData>
-//       </wps:Data>
-//     </wps:Input>
-//   </wps:DataInputs>
-// </wps:Execute>
 
 //gs:ReprojectGeometry
 // <wps:Execute service="WPS" version="1.0.0"
@@ -112,10 +89,34 @@ export const reprojectGeometryXML = ({
 //       </wps:Data>
 //     </wps:Input>
 //   </wps:DataInputs>
-
+//
 //   <wps:ResponseForm>
 //     <wps:RawDataOutput mimeType="application/wkt">
 //       <ows:Identifier>result</ows:Identifier>
 //     </wps:RawDataOutput>
 //   </wps:ResponseForm>
+// </wps:Execute>
+
+
+//gs:Reproject
+// <wps:Execute service="WPS" version="1.0.0"
+//   xmlns:wps="http://www.opengis.net/wps/1.0.0"
+//   xmlns:ows="http://www.opengis.net/ows/1.1"
+//   xmlns:xlink="http://www.w3.org/1999/xlink"
+//   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+//   xsi:schemaLocation="http://www.opengis.net/wps/1.0.0
+//   http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+//   <ows:Identifier>gs:Reproject</ows:Identifier>
+//   <wps:DataInputs>
+//     <wps:Input>
+//       <ows:Identifier>features</ows:Identifier>
+//       <wps:Reference xlink:href="http://geoserver/wfs?...typename=mylayer"/>
+//     </wps:Input>
+//     <wps:Input>
+//       <ows:Identifier>targetCRS</ows:Identifier>
+//       <wps:Data>
+//         <wps:LiteralData>EPSG:4326</wps:LiteralData>
+//       </wps:Data>
+//     </wps:Input>
+//   </wps:DataInputs>
 // </wps:Execute>

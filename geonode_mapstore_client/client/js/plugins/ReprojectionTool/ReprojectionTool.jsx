@@ -51,11 +51,18 @@ const ReprojectionTool = ({
         { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
     ];
 
-    const handleCrsChange = ({ crsOrigin, crsTarget }) => {
+    const handleChangeCrs = ({ crsOrigin, crsTarget }) => {
         console.log(`CRS origin changed to ${crsOrigin}`);
         console.log(`CRS target changed to ${crsTarget}`);
         setSourceCrs(crsOrigin);
         setTargetCrs(crsTarget);
+    }
+
+    const handleChangeCoordinates = (coordinates) => {
+        console.log('Coordinates changed:', coordinates);
+        // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
+        const wkt = `MULTIPOINT(${coordinates.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
+        setGeom(wkt);
     }
 
     return (
@@ -71,7 +78,7 @@ const ReprojectionTool = ({
                     <InputCrs
                         crsOrigin={CRS_OPTIONS[0].value}
                         crsTarget={CRS_OPTIONS[1].value}
-                        onChange={handleCrsChange}
+                        onChange={handleChangeCrs}
                     />
                     <br/><br/>
                 </div>
@@ -82,7 +89,7 @@ const ReprojectionTool = ({
                                 <InputCoordinates
                                     coordinates={[[45, 12]]}
                                     // format="decimal"
-                                    // onChange={(coordinates) => console.log(coordinates)}
+                                    onChange={handleChangeCoordinates}
                                 />
                             </div>
                         </Tab>

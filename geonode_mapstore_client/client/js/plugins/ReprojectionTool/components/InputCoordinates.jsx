@@ -8,12 +8,6 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 import Message from '@mapstore/framework/components/I18N/Message';
-//import MessageHtml from '@mapstore/framework/components/I18N/HTML';
-
-//TODO Annotations use  client/MapStore2/web/client/components/misc/coordinateeditors/editors/CRSCoordinateEditor.jsx
-//import CRSCoordinateEditor from '@mapstore/framework/components/misc/coordinateeditors/editors/CRSCoordinateEditor';
-//import DecimalCoordinateEditor from './editors/DecimalCoordinateEditor';
-//import AeronauticalCoordinateEditor from './editors/AeronauticalCoordinateEditor';
 
 import CoordinateEntry from '@mapstore/framework/components/misc/coordinateeditors/CoordinateEntry';
 
