@@ -25,6 +25,8 @@ import {
 import InputCoordinates from './components/InputCoordinates';
 import InputCrs from './components/InputCrs';
 
+import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
+
 //TODO connect in next step if needed
 // const connectReprojectionTool = connect(
 //     createSelector([
@@ -43,34 +45,57 @@ import InputCrs from './components/InputCrs';
 //     }
 // );
 
+/**
+ * 
+ * plugin localConfig
+ * "reprojection_tool": [
+            {
+                "name": "ReprojectionTool",
+                "cfg": {
+                    "defaultInputType": "coordinates",                    
+                    "defaultCrsOrigin": "EPSG:4326",
+                    "defaultCrsTarget": "EPSG:3857",
+                    "defaultCrsList": [
+                        { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
+                        { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
+                    ]
+                }
+            }
+        ]
+ */
 const ReprojectionTool = ({
     // setSourceCrs,
     // setTargetCrs,
     // setGeometry
 }) => {
+    
+    const {geoserverUrl} = getConfigProp('geoNodeSettings');
 
-    const wpsUrl = '/geoserver/wps';
-    const executeOptions = {};
+    //TODO check retrieve plugin config
+    const {reprojection_tool} = getConfigProp('plugins');
+    const reprojectionConfig = reprojection_tool?.[0]?.cfg;
 
-    //TODO get from GetCapabilities at mount
-    const CRS_LIST = [
-        { value: "EPSG:4326", label: "EPSG:4326 (WGS84)" },
-        { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
-    ];
-
-    const [inputType, setInputType] = useState('coordinates'); // 'coordinates' | 'layer'
+    const {
+        defaultCrsList,        
+        defaultCrsOrigin,
+        defaultCrsTarget,
+        defaultInputType = 'coordinates', // 'coordinates' | 'filelayer'
+    } = reprojectionConfig || {};
+    
+    const [inputType, setInputType] = useState(defaultInputType);
     
     const [crsList, setCrsList] = useState([]);
-    const [sourceCrs, setSourceCrs] = useState(CRS_LIST[0].value);
-    const [targetCrs, setTargetCrs] = useState(CRS_LIST[1].value);
+    const [sourceCrs, setSourceCrs] = useState(defaultCrsOrigin);
+    const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
     
     const [coordinates, setCoordinates] = useState([{x:11.1, y:46.1},{x:11.2, y:46.2}]);
+    
     const [result, setResult] = useState('');
 
     React.useEffect(() => {
-        //TODO retrieve from geoserver GetCapabilities
+        //TODO fetch from geoserver GetCapabilities of get from geonode static config?
         setTimeout(() => {
-            setCrsList(CRS_LIST);
+            setCrsList(defaultCrsList);
         }, 2500);
     }, []);
 
@@ -81,8 +106,6 @@ const ReprojectionTool = ({
     }
 
     const handleChangeCrs = ({ crsSource, crsTarget }) => {
-        console.log(`CRS source ${crsSource}`);
-        console.log(`CRS target ${crsTarget}`);
         setSourceCrs(crsSource);
         setTargetCrs(crsTarget);
     }
@@ -92,18 +115,21 @@ const ReprojectionTool = ({
         setCoordinates(coordinates);
     }
 
-    //TODO handle file input
-    // const handleChangeLayer = (layer) => {
+    //TODO handle filelayer input
+    // const handleChangeFileLayer = (layer) => {
     // TODO extract convert file to gml before send to process
-    //     setInputType('layer');
+    //     setInputType('filelayer');
     // }
 
     const handleProcess = () => {
-
-        //TODO switch by inputType to reprojectGeometryXML|reprojectXML
+        const executeOptions = {};
+        //TODO switch by inputType:
+        // 'coordinates': reprojectGeometryXML (format WKT)
+        // 'filelayer': reprojectXML (format GML)
+        //
         setResult('');
         executeProcess(
-            wpsUrl,
+            `${geoserverUrl}/wps`,
             reprojectGeometryXML({
                 sourceCrs,
                 targetCrs,
@@ -126,7 +152,7 @@ const ReprojectionTool = ({
     return (
         <div className="reprojection-tool">
             <div className="container-fluid d-flex justify-content-center" style={{ maxWidth: '800px' }}>
-                <div className="row mb-4 p-20">
+                <div className="row mb-4 p-40">
                     <div className="reprojection-header">
                         <h3>Reprojection Tool</h3>
                         <p className="text-muted">Transform coordinates between different coordinate reference systems</p>
@@ -142,19 +168,18 @@ const ReprojectionTool = ({
                     <br/><br/>
                 </div>
                 <div className="row mb-4 p-20">
-                    <Tabs defaultActiveKey="coordinates" id="reprojection-tabs">
+                    <Tabs defaultActiveKey="coordinates" id="reprojection-tabs" onSelect={(k) => setInputType(k)}>
                         <br />
-                        <Tab eventKey="coordinates" title="Source Coordinates">
-                            <div className="p-20">
+                        <Tab eventKey="coordinates" title="Source Coordinates" style={{ minHeight: '80px' }}>
+                            <div className="p-40">
                                 <InputCoordinates
                                     coordinates={coordinates}
                                     onChange={handleChangeCoordinates}
                                 />
                             </div>
                         </Tab>
-                        <Tab eventKey="layer" title="Source Layer">
-                            <br/><br/>
-                            <div className="p-20">
+                        <Tab eventKey="filelayer" title="Source File Layer" style={{ minHeight: '80px' }}>
+                            <div className="p-40">
                                 <label htmlFor="file-upload">Drop File Layer to Upload</label>
                             </div>
                         </Tab>
@@ -163,13 +188,13 @@ const ReprojectionTool = ({
                 <div className="row mb-4 p-20">
                     <br/>
                     <button className="btn btn-primary" onClick={handleProcess}>RUN</button>
-                    <small className="text-muted"> Reproject {inputType} from {sourceCrs} to {targetCrs} </small>
+                    <small className="text-muted"> Reproject <b>{inputType}</b> from <b>{sourceCrs}</b> to <b>{targetCrs}</b> </small>
                 </div>
                 <div className="row mb-4 p-20">
                     {result && (
                         <FormGroup>
                             <br/>
-                            <ControlLabel>Reprojection Result in WKT format</ControlLabel>
+                            <ControlLabel>Reprojection Result (WKT format)</ControlLabel>
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}

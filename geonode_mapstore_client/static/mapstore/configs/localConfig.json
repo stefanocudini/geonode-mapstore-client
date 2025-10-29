@@ -3691,9 +3691,13 @@
             {
                 "name": "ReprojectionTool",
                 "cfg": {
-                    "defaultCrsOrigin": "4326",
-                    "defaultCrsTarget": "4326",
-                    "defaultInput": "points"
+                    "defaultInputType": "coordinates",                    
+                    "defaultCrsOrigin": "EPSG:4326",
+                    "defaultCrsTarget": "EPSG:3857",
+                    "defaultCrsList": [
+                        { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
+                        { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
+                    ]
                 }
             }
         ]
