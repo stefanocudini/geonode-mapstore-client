@@ -59,11 +59,20 @@ const ReprojectionTool = ({
     ];
 
     const [inputType, setInputType] = useState('coordinates'); // 'coordinates' | 'layer'
-
-    const [sourceCrs, setSourceCrs] = useState('EPSG:4326');
-    const [targetCrs, setTargetCrs] = useState('EPSG:3857');
+    
+    const [crsList, setCrsList] = useState([]);
+    const [sourceCrs, setSourceCrs] = useState(CRS_LIST[0].value);
+    const [targetCrs, setTargetCrs] = useState(CRS_LIST[1].value);
+    
     const [coordinates, setCoordinates] = useState([{x:11.1, y:46.1},{x:11.2, y:46.2}]);
     const [result, setResult] = useState('');
+
+    React.useEffect(() => {
+        //TODO retrieve from geoserver GetCapabilities
+        setTimeout(() => {
+            setCrsList(CRS_LIST);
+        }, 2500);
+    }, []);
 
     const coordinatesToWKT = (coords = []) => {
         // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
@@ -125,9 +134,9 @@ const ReprojectionTool = ({
                 </div>
                 <div className="row mb-4 p-20">
                     <InputCrs
-                        crsList={CRS_LIST}
-                        crsSource={CRS_LIST[0].value}
-                        crsTarget={CRS_LIST[1].value}
+                        crsList={crsList}
+                        crsSource={sourceCrs}
+                        crsTarget={targetCrs}
                         onChange={handleChangeCrs}
                     />
                     <br/><br/>
@@ -162,11 +171,12 @@ const ReprojectionTool = ({
                             <br/>
                             <ControlLabel>Reprojection Result in WKT format</ControlLabel>
                             <br/>
-                            <textarea
+                            <textarea style={{ width: '100%' }}
+                                onClick={(e) => e.target.select()}
                                 readOnly
                                 rows={8}
                                 value={result}
-                                className="reprojection-result w-full border rounded-lg font-mono"
+                                className="reprojection-result w-100 border rounded-lg font-mono"
                             />
                         </FormGroup>
                         )}
