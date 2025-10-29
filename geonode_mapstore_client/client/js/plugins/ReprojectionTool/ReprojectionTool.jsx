@@ -133,7 +133,8 @@ const ReprojectionTool = ({
             reprojectGeometryXML({
                 sourceCrs,
                 targetCrs,
-                geometry: coordinatesToWKT(coordinates)
+                geometry: coordinatesToWKT(coordinates),
+                outputFormat: 'application/wkt'
             }),
             executeOptions, {
                 headers: {
@@ -143,7 +144,6 @@ const ReprojectionTool = ({
             })
         .toPromise()
         .then(response => {
-            console.log('response from WPS reprojectGeometry', response);
             setResult(response);
         })
         .catch(() => null);  
@@ -185,12 +185,12 @@ const ReprojectionTool = ({
                         </Tab>
                     </Tabs>
                 </div>
-                <div className="row mb-4 p-20">
+                <div className="row mb-4 p-40">
                     <br/>
-                    <button className="btn btn-primary" onClick={handleProcess}>RUN</button>
+                    <button className="btn btn-primary" onClick={handleProcess}>Send</button>
                     <small className="text-muted"> Reproject <b>{inputType}</b> from <b>{sourceCrs}</b> to <b>{targetCrs}</b> </small>
                 </div>
-                <div className="row mb-4 p-20">
+                <div className="row mb-4 p-40">
                     {result && (
                         <FormGroup>
                             <br/>

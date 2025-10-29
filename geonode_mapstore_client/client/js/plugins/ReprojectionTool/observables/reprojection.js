@@ -20,12 +20,14 @@ import { executeProcessXML } from '@mapstore/framework/observables/wps/execute';
 export const reprojectGeometryXML = ({
     sourceCrs,
     targetCrs,
-    geometry
+    geometry,
+    outputFormat = "application/wkt"
+    //TODO verify output format from /geoserver/wps?service=WPS&version=2.0.0&request=DescribeProcess&identifier=gs:ReprojectGeometry
 }) => {
     const payload = [
         processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
-        processParameter('geometry', processData(complexData(cdata(geometry), "application/wkt"))),
+        processParameter('geometry', processData(complexData(cdata(geometry), outputFormat))),
     ];
     return executeProcessXML(
         'gs:ReprojectGeometry',
@@ -40,12 +42,13 @@ export const reprojectGeometryXML = ({
 export const reprojectXML = ({
     sourceCrs,
     targetCrs,
-    features
+    features,
+    outputFormat = "application/wkt"
 }) => {
     const payload = [
         processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
-        //TODO features as reference layer or file GML?
+        //TODO features as reference layer or file GML
     ];
     return executeProcessXML(
         'gs:Reproject',
