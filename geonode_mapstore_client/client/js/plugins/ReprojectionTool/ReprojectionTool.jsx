@@ -13,7 +13,7 @@ import { createSelector } from 'reselect';
 import { Form, FormGroup, ControlLabel, InputGroup, Tabs, Tab } from 'react-bootstrap';
 
 import executeProcess from '@mapstore/framework/observables/wps/execute';
-import {reprojectGeometryXML} from './observables/reprojection'
+import {reprojectGeometryXML, reprojectXML} from './observables/reprojection'
 
 import {
     setReprojectSourceCrs,
@@ -28,7 +28,7 @@ import InputCrs from './components/InputCrs';
 import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
 
 //TODO connect in next step if needed
-// const connectReprojectionTool = connect(
+// const connectReprojectionConnected = connect(
 //     createSelector([
 //         state => state?.reprojection?.sourceCRS,
 //         state => state?.reprojection?.targetCRS,
@@ -118,17 +118,23 @@ const ReprojectionTool = ({
         //TODO switch by inputType:
         // 'coordinates': reprojectGeometryXML (format WKT)
         // 'filelayer': reprojectXML (format GML)
-        //
+        const executeXml = inputType === 'coordinates' ? reprojectGeometryXML({
+            sourceCrs,
+            targetCrs,
+            geometry: coordinatesToWKT(coordinates),
+            outputFormat: 'application/wkt'
+        }) : reprojectXML({
+            sourceCrs,
+            targetCrs,
+            //TODO features: convertFileLayerToGML(),
+            outputFormat: 'application/gml'
+        });
+        
         setResult('');
-        executeProcess(
-            `${geoserverUrl}/wps`,
-            reprojectGeometryXML({
-                sourceCrs,
-                targetCrs,
-                geometry: coordinatesToWKT(coordinates),
-                outputFormat: 'application/wkt'
-            }),
-            executeOptions, {
+        executeProcess(`${geoserverUrl}/wps`,
+            executeXml,
+            executeOptions,
+            {
                 headers: {
                     'Content-Type': 'application/xml',
                     'Accept': `application/xml, application/json`
@@ -203,10 +209,10 @@ const ReprojectionTool = ({
     );
 };
 
-//const ReprojectionToolPlugin = connectReprojectionTool(ReprojectionTool);
+//const connectReprojectionConnected = connectReprojectionTool(ReprojectionTool);
 
 export default createPlugin('ReprojectionTool', {
-    //component: ReprojectionToolPlugin,
+    //component: connectReprojectionConnected,
     component: ReprojectionTool,
     containers: {},
     epics: {},
