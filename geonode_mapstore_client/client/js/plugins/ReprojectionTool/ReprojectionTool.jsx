@@ -67,23 +67,15 @@ const ReprojectionTool = ({
     // setSourceCrs,
     // setTargetCrs,
     // setGeometry
+    defaultCrsList,
+    defaultCrsOrigin,
+    defaultCrsTarget,
+    defaultInputType = 'coordinates', // 'coordinates' | 'filelayer'
 }) => {
-    
     const {geoserverUrl} = getConfigProp('geoNodeSettings');
-
-    //TODO check retrieve plugin config
-    const {reprojection_tool} = getConfigProp('plugins');
-    const reprojectionConfig = reprojection_tool?.[0]?.cfg;
-
-    const {
-        defaultCrsList,        
-        defaultCrsOrigin,
-        defaultCrsTarget,
-        defaultInputType = 'coordinates', // 'coordinates' | 'filelayer'
-    } = reprojectionConfig || {};
     
     const [inputType, setInputType] = useState(defaultInputType);
-    
+
     const [crsList, setCrsList] = useState([]);
     const [sourceCrs, setSourceCrs] = useState(defaultCrsOrigin);
     const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
@@ -93,7 +85,7 @@ const ReprojectionTool = ({
     const [result, setResult] = useState('');
 
     React.useEffect(() => {
-        //TODO fetch from geoserver GetCapabilities of get from geonode static config?
+        //TODO fetch from geoserver GetCapabilities
         setTimeout(() => {
             setCrsList(defaultCrsList);
         }, 2500);
