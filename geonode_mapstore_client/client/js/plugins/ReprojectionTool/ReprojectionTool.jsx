@@ -79,17 +79,20 @@ const ReprojectionTool = ({
     }
 
     const handleChangeCoordinates = (coordinates) => {
-        console.log('Coordinates changed:', coordinates);
         setInputType('coordinates');
         setCoordinates(coordinates);
     }
 
+    //TODO handle file input
+    // const handleChangeLayer = (layer) => {
+    // TODO extract convert file to gml before send to process
+    //     setInputType('layer');
+    // }
+
     const handleProcess = () => {
-        
-        console.log('WPS Processing...');
 
         //TODO switch by inputType to reprojectGeometryXML|reprojectXML
-    
+        setResult('');
         executeProcess(
             wpsUrl,
             reprojectGeometryXML({
@@ -156,13 +159,13 @@ const ReprojectionTool = ({
                     {result && (
                         <FormGroup>
                             <br/>
-                            <ControlLabel>Reprojection Result</ControlLabel>
+                            <ControlLabel>Reprojection Result in WKT format</ControlLabel>
                             <br/>
                             <textarea
                                 readOnly
                                 rows={8}
                                 value={result}
-                                className="reprojection-result w-full mt-4 p-2 border rounded-lg font-mono"
+                                className="reprojection-result w-full border rounded-lg font-mono"
                             />
                         </FormGroup>
                         )}

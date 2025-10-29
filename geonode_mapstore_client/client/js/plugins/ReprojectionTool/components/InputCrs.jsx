@@ -38,10 +38,10 @@ const InputCrs = ({
             <div className="col-6">
                 <label htmlFor="source-crs">Source CRS</label>
                 <select id="source-crs" className="form-control"
+                    placeholder="Select Source CRS"
                     onChange={(e) => handleCrsChange('origin', e.target.value)}
                     value={crsSource}
                 >
-                    <option value="">Select Source CRS</option>
                     {CRS_OPTIONS.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.label}
@@ -52,10 +52,10 @@ const InputCrs = ({
             <div className="col-6">
                 <label htmlFor="target-crs">Target CRS</label>
                 <select id="target-crs" className="form-control"
+                    placeholder="Select Target CRS"
                     onChange={(e) => handleCrsChange('target', e.target.value)}
                     value={crsTarget}
                 >
-                    <option value="">Select Target CRS</option>
                     {CRS_OPTIONS.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.label}

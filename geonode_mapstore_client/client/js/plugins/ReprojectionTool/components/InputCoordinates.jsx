@@ -13,15 +13,24 @@ import CoordinateEntry from '@mapstore/framework/components/misc/coordinateedito
 
 const InputCoordinates = ({
     coordinates = [],
+    //coordinates = [{x:11.1, y:46.1},{x:11.2, y:46.2}],
     format = 'decimal',
     onChange
 }) => {
     const [currentCoords, setCurrentCoords] = useState(coordinates);
 
-    function handleChange(newCoord) {
-        const updatedValues = [...currentCoords, newCoord];
-        setCurrentCoords(updatedValues);
-        onChange(updatedValues);
+    function handleChange(idx, type, newCoord) {
+        const updatedCoords = currentCoords.map((coord, cIdx) => {
+            if (cIdx === idx) {
+                return {
+                    ...coord,
+                    [type]: parseFloat(newCoord)
+                };
+            }
+            return coord;
+        });
+        setCurrentCoords(updatedCoords);
+        onChange(updatedCoords);
     }
 
     return (
@@ -30,10 +39,11 @@ const InputCoordinates = ({
                 <InputGroup>
                     <InputGroup.Addon><Message msgId="latitude"/></InputGroup.Addon>
                     <CoordinateEntry
+                        idx={0}
                         format={format}
                         coordinate="lat"
                         value={currentCoords[0].y}
-                        onChange={(dd) => handleChange([dd, currentCoords[1]])}
+                        onChange={(dd) => handleChange(0, 'y', dd)}
                     />
                 </InputGroup>
             </div>
@@ -41,10 +51,12 @@ const InputCoordinates = ({
                 <InputGroup>
                     <InputGroup.Addon><Message msgId="longitude"/></InputGroup.Addon>
                     <CoordinateEntry
+                        idx={0}
                         format={format}
                         coordinate="lon"
                         value={currentCoords[0].x}
-                        onChange={(dd) => handleChange([currentCoords[0], dd])}
+                        onChange={(dd) => handleChange(0, 'x', dd)}
+                        onKeyDown={() => {}}
                     />
                 </InputGroup>
             </div>
