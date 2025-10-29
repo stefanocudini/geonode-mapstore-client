@@ -10,18 +10,13 @@ import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 import Message from '@mapstore/framework/components/I18N/Message';
 
 const InputCrs = ({
+    crsList = [],
     crsSource,
     crsTarget,
     onChange = () => {}
 }) => {
     const [origin, setOrigin] = useState(crsSource);
     const [target, setTarget] = useState(crsTarget);
-
-    //TODO move in config in first step and next retrieve from geoserver
-    const CRS_OPTIONS = [
-        { value: "EPSG:4326", label: "EPSG:4326 (WGS84)" },
-        { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
-    ];
 
     const handleCrsChange = (type, value) => {
         if (type === 'origin') {
@@ -40,9 +35,9 @@ const InputCrs = ({
                 <select id="source-crs" className="form-control"
                     placeholder="Select Source CRS"
                     onChange={(e) => handleCrsChange('origin', e.target.value)}
-                    value={crsSource}
+                    value={origin}
                 >
-                    {CRS_OPTIONS.map(option => (
+                    {crsList.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
@@ -54,9 +49,9 @@ const InputCrs = ({
                 <select id="target-crs" className="form-control"
                     placeholder="Select Target CRS"
                     onChange={(e) => handleCrsChange('target', e.target.value)}
-                    value={crsTarget}
+                    value={target}
                 >
-                    {CRS_OPTIONS.map(option => (
+                    {crsList.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>

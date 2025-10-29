@@ -72,8 +72,8 @@ const ReprojectionTool = ({
     }
 
     const handleChangeCrs = ({ crsSource, crsTarget }) => {
-        console.log(`CRS origin changed to ${crsSource}`);
-        console.log(`CRS target changed to ${crsTarget}`);
+        console.log(`CRS source ${crsSource}`);
+        console.log(`CRS target ${crsTarget}`);
         setSourceCrs(crsSource);
         setTargetCrs(crsTarget);
     }
@@ -125,7 +125,8 @@ const ReprojectionTool = ({
                 </div>
                 <div className="row mb-4 p-20">
                     <InputCrs
-                        crsOrigin={CRS_LIST[0].value}
+                        crsList={CRS_LIST}
+                        crsSource={CRS_LIST[0].value}
                         crsTarget={CRS_LIST[1].value}
                         onChange={handleChangeCrs}
                     />
