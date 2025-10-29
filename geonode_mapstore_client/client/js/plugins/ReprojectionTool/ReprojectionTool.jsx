@@ -58,6 +58,8 @@ const ReprojectionTool = ({
         { value: "EPSG:3857", label: "EPSG:3857 (Web Mercator)" }
     ];
 
+    const [inputType, setInputType] = useState('coordinates'); // 'coordinates' | 'layer'
+
     const [sourceCrs, setSourceCrs] = useState('EPSG:4326');
     const [targetCrs, setTargetCrs] = useState('EPSG:3857');
     const [coordinates, setCoordinates] = useState([{x:11.1, y:46.1},{x:11.2, y:46.2}]);
@@ -69,21 +71,24 @@ const ReprojectionTool = ({
         return wkt;
     }
 
-    const handleChangeCrs = ({ crsOrigin, crsTarget }) => {
-        console.log(`CRS origin changed to ${crsOrigin}`);
+    const handleChangeCrs = ({ crsSource, crsTarget }) => {
+        console.log(`CRS origin changed to ${crsSource}`);
         console.log(`CRS target changed to ${crsTarget}`);
-        setSourceCrs(crsOrigin);
+        setSourceCrs(crsSource);
         setTargetCrs(crsTarget);
     }
 
     const handleChangeCoordinates = (coordinates) => {
         console.log('Coordinates changed:', coordinates);
+        setInputType('coordinates');
         setCoordinates(coordinates);
     }
 
     const handleProcess = () => {
         
         console.log('WPS Processing...');
+
+        //TODO switch by inputType to reprojectGeometryXML|reprojectXML
     
         executeProcess(
             wpsUrl,
@@ -145,6 +150,7 @@ const ReprojectionTool = ({
                 <div className="row mb-4 p-20">
                     <br/>
                     <button className="btn btn-primary" onClick={handleProcess}>RUN</button>
+                    <small className="text-muted"> Reproject {inputType} from {sourceCrs} to {targetCrs} </small>
                 </div>
                 <div className="row mb-4 p-20">
                     {result && (

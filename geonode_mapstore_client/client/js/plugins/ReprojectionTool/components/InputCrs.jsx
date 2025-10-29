@@ -10,11 +10,11 @@ import { Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 import Message from '@mapstore/framework/components/I18N/Message';
 
 const InputCrs = ({
-    crsOrigin,
+    crsSource,
     crsTarget,
     onChange = () => {}
 }) => {
-    const [origin, setOrigin] = useState(crsOrigin);
+    const [origin, setOrigin] = useState(crsSource);
     const [target, setTarget] = useState(crsTarget);
 
     //TODO move in config in first step and next retrieve from geoserver
@@ -26,10 +26,10 @@ const InputCrs = ({
     const handleCrsChange = (type, value) => {
         if (type === 'origin') {
             setOrigin(value);
-            onChange({ crsOrigin: value, crsTarget: target });
+            onChange({ crsSource: value, crsTarget: target });
         } else {
             setTarget(value);
-            onChange({ crsOrigin: origin, crsTarget: value });
+            onChange({ crsSource: origin, crsTarget: value });
         }
     };
 
@@ -39,7 +39,7 @@ const InputCrs = ({
                 <label htmlFor="source-crs">Source CRS</label>
                 <select id="source-crs" className="form-control"
                     onChange={(e) => handleCrsChange('origin', e.target.value)}
-                    value={crsOrigin}
+                    value={crsSource}
                 >
                     <option value="">Select Source CRS</option>
                     {CRS_OPTIONS.map(option => (
