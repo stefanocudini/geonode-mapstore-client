@@ -81,9 +81,9 @@ const ReprojectionTool = ({
     const [crsList, setCrsList] = useState([]);
     const [sourceCrs, setSourceCrs] = useState(defaultCrsOrigin);
     const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
-    
-    const [coordinates, setCoordinates] = useState([{lat:null, lon:null}]);
-    
+
+    const [coordinates, setCoordinates] = useState([{lat:undefined, lon:undefined}]);
+
     const [result, setResult] = useState('');
 
     React.useEffect(() => {

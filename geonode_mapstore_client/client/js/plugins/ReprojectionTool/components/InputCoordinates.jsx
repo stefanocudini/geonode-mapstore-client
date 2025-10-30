@@ -23,6 +23,15 @@ const InputCoordinates = ({
 }) => {
     const [currentCoords, setCurrentCoords] = useState(coordinates);
 
+    const componentsValidation = {
+        "MultiPoint": {
+            min: 1,
+            add: true,
+            remove: true, 
+            validation: "validateCoordinates",
+            notValid: "annotations.editor.notValidPolyline"
+        }
+    }
     // function handleChange(idx, type, newCoord) {
     //     const updatedCoords = currentCoords.map((coord, cIdx) => {
     //         if (cIdx === idx) {
@@ -78,6 +87,7 @@ const InputCoordinates = ({
                     format={format}
                     items={[]}
                     components={currentCoords}
+                    componentsValidation={componentsValidation}
                     onRemove={() => {}}
                     onChange={(components, radius, text, crs) => {
                         const validCoords = components.filter(validateLonLat);
