@@ -35,31 +35,31 @@ const InputCoordinates = ({
 
     return (
         <Form className="reprojection-coordinates" style={{ display: 'flex', gap: '5px' }}>
-            <div className="input-group-container">
-                <InputGroup>
-                    <InputGroup.Addon><Message msgId="latitude"/></InputGroup.Addon>
-                    <CoordinateEntry
-                        idx={0}
-                        format={format}
-                        coordinate="lat"
-                        value={currentCoords[0].y}
-                        onChange={(dd) => handleChange(0, 'y', dd)}
-                    />
-                </InputGroup>
-            </div>
-            <div className="input-group-container">
-                <InputGroup>
-                    <InputGroup.Addon><Message msgId="longitude"/></InputGroup.Addon>
-                    <CoordinateEntry
-                        idx={0}
-                        format={format}
-                        coordinate="lon"
-                        value={currentCoords[0].x}
-                        onChange={(dd) => handleChange(0, 'x', dd)}
-                        onKeyDown={() => {}}
-                    />
-                </InputGroup>
-            </div>
+            <InputGroup>
+                <InputGroup.Addon style={{ height: '20px' }}>
+                    <Message msgId="latitude"/>
+                </InputGroup.Addon>
+                <CoordinateEntry
+                    idx={0}
+                    format={format}
+                    coordinate="lat"
+                    value={currentCoords[0].y}
+                    onChange={(dd) => handleChange(0, 'y', dd)}
+                />
+            </InputGroup>
+            <InputGroup>
+                <InputGroup.Addon>
+                    <Message msgId="longitude"/>
+                </InputGroup.Addon>
+                <CoordinateEntry
+                    idx={0}
+                    format={format}
+                    coordinate="lon"
+                    value={currentCoords[0].x}
+                    onChange={(dd) => handleChange(0, 'x', dd)}
+                    onKeyDown={() => {}}
+                />
+            </InputGroup>
         </Form>
     );
 };

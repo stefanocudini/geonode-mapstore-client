@@ -22,8 +22,9 @@ import {
 } from './actions/reprojection';
 // import reprojection from './reducers/reprojection';
 
-import InputCoordinates from './components/InputCoordinates';
 import InputCrs from './components/InputCrs';
+import InputCoordinates from './components/InputCoordinates';
+import InputFileLayer from './components/InputFileLayer';
 
 import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
 
@@ -47,21 +48,19 @@ import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
 
 /**
  * 
- * plugin localConfig
- * "reprojection_tool": [
-            {
-                "name": "ReprojectionTool",
-                "cfg": {
-                    "defaultInputType": "coordinates",                    
-                    "defaultCrsOrigin": "EPSG:4326",
-                    "defaultCrsTarget": "EPSG:3857",
-                    "defaultCrsList": [
-                        { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
-                        { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
-                    ]
-                }
-            }
-        ]
+ * ReprojectionTool plugin default localConfig:
+    {
+        "name": "ReprojectionTool",
+        "cfg": {
+            "defaultInputType": "coordinates",                    
+            "defaultCrsOrigin": "EPSG:4326",
+            "defaultCrsTarget": "EPSG:3857",
+            "defaultCrsList": [
+                { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
+                { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
+            ]
+        }
+    }
  */
 const ReprojectionTool = ({
     // setSourceCrs,
@@ -88,14 +87,14 @@ const ReprojectionTool = ({
         //TODO fetch from geoserver GetCapabilities
         setTimeout(() => {
             setCrsList(defaultCrsList);
-        }, 2500);
+        }, 800);
     }, []);
 
     const coordinatesToWKT = (coords = []) => {
         // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
-        const wkt = `MULTIPOINT(${coords.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
-        return wkt;
+        return `MULTIPOINT(${coords.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
     }
+    //TODO const fileLayerToGML = (fileBin) => {}
 
     const handleChangeCrs = ({ crsSource, crsTarget }) => {
         setSourceCrs(crsSource);
@@ -108,16 +107,20 @@ const ReprojectionTool = ({
     }
 
     //TODO handle filelayer input
-    // const handleChangeFileLayer = (layer) => {
-    // TODO extract convert file to gml before send to process
-    //     setInputType('filelayer');
-    // }
+    const handleChangeFileLayer = (layer) => {
+        setInputType('filelayer');
+        // TODO extract convert file to gml before send to process
+        console.log('Input File Layer');
+    }
 
+    /**
+     * request process by inputType:
+        'coordinates': gs:ReprojectGeometry (format WKT)
+        'filelayer': gs:Reproject (format GML)
+     */
     const handleProcess = () => {
         const executeOptions = {};
-        //TODO switch by inputType:
-        // 'coordinates': reprojectGeometryXML (format WKT)
-        // 'filelayer': reprojectXML (format GML)
+        setResult('');
         const executeXml = inputType === 'coordinates' ? reprojectGeometryXML({
             sourceCrs,
             targetCrs,
@@ -129,8 +132,7 @@ const ReprojectionTool = ({
             //TODO features: convertFileLayerToGML(),
             outputFormat: 'application/gml'
         });
-        
-        setResult('');
+
         executeProcess(`${geoserverUrl}/wps`,
             executeXml,
             executeOptions,
@@ -177,8 +179,8 @@ const ReprojectionTool = ({
                             </div>
                         </Tab>
                         <Tab eventKey="filelayer" title="Source File Layer" style={{ minHeight: '80px' }}>
-                            <div className="p-40">
-                                <label htmlFor="file-upload">Drop File Layer to Upload</label>
+                            <div className="p-40 text-center border-dashed border-secondary">
+                                <InputFileLayer onChange={handleChangeFileLayer} />
                             </div>
                         </Tab>
                     </Tabs>
@@ -196,11 +198,26 @@ const ReprojectionTool = ({
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}
-                                readOnly
                                 rows={8}
                                 value={result}
                                 className="reprojection-result w-100 border rounded-lg font-mono"
                             />
+                            <button 
+                                className="btn btn-secondary ms-2" 
+                                onClick={() => setResult('')}
+                            >
+                                Reset
+                            </button>
+                            &nbsp;
+                            <button 
+                                className="btn btn-outline-secondary ms-2" 
+                                onClick={() => {
+                                    navigator.clipboard.writeText(result)
+                                }}
+                                title="Copy to clipboard"
+                            >
+                                Copy
+                            </button>                            
                         </FormGroup>
                         )}
                 </div>
