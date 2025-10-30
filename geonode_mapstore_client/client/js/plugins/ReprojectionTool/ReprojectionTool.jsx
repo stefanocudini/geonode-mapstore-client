@@ -155,7 +155,10 @@ const ReprojectionTool = ({
                 <div className="row mb-4 p-40">
                     <div className="reprojection-header">
                         <h3>Reprojection Tool</h3>
-                        <p className="text-muted">Transform coordinates between different coordinate reference systems</p>
+                        <p className="text-muted">
+                            Convert coordinates or file between different reference systems.
+                            <br/><br/>
+                        </p>
                     </div>
                 </div>
                 <div className="row mb-4 p-20">
@@ -198,7 +201,7 @@ const ReprojectionTool = ({
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}
-                                rows={8}
+                                rows={5}
                                 value={result}
                                 className="reprojection-result w-100 border rounded-lg font-mono"
                             />
