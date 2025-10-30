@@ -12,7 +12,10 @@ import { createSelector } from 'reselect';
 
 import { Form, FormGroup, ControlLabel, InputGroup, Tabs, Tab } from 'react-bootstrap';
 
+import { show } from '@mapstore/framework/actions/notifications';
 import executeProcess from '@mapstore/framework/observables/wps/execute';
+
+
 import {reprojectGeometryXML, reprojectXML} from './observables/reprojection'
 
 import {
@@ -79,7 +82,7 @@ const ReprojectionTool = ({
     const [sourceCrs, setSourceCrs] = useState(defaultCrsOrigin);
     const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
     
-    const [coordinates, setCoordinates] = useState([{x:11.1, y:46.1},{x:11.2, y:46.2}]);
+    const [coordinates, setCoordinates] = useState([{lat:null, lon:null}]);
     
     const [result, setResult] = useState('');
 
@@ -91,8 +94,8 @@ const ReprojectionTool = ({
     }, []);
 
     const coordinatesToWKT = (coords = []) => {
-        // Convert coordinates to WKT format from [{x:.., y:..}, ...] x,y objects
-        return `MULTIPOINT(${coords.map(coord => `(${coord.x} ${coord.y})`).join(', ')})`;
+        // Convert coordinates to WKT format from [{lat:.., lon:..}, ...] lat,lon objects
+        return `MULTIPOINT(${coords.map(coord => `(${coord.lon} ${coord.lat})`).join(', ')})`;
     }
     //TODO const fileLayerToGML = (fileBin) => {}
 
@@ -103,6 +106,7 @@ const ReprojectionTool = ({
 
     const handleChangeCoordinates = (coordinates) => {
         setInputType('coordinates');
+        console.log('Input Coordinates', coordinates);
         setCoordinates(coordinates);
     }
 
@@ -145,6 +149,10 @@ const ReprojectionTool = ({
         .toPromise()
         .then(response => {
             setResult(response);
+            show({
+                title: 'Processed completed',
+                message: 'converted successfully',
+            })
         })
         .catch(() => null);  
     }
