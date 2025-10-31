@@ -14,9 +14,14 @@ import CoordinatesEditor from '@mapstore/framework/components/mapcontrols/annota
 const InputCoordinates = ({
     coordinates = [],
     format = 'decimal',
-    onChange = () => {},
+    onChange = () => {}
 }) => {
+    
     const [currentCoords, setCurrentCoords] = useState(coordinates);
+
+    React.useEffect(() => {
+        setCurrentCoords(coordinates);
+    }, [coordinates]);
 
     const componentsValidation = {
         "MultiPoint": {

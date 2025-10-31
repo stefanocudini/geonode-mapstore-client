@@ -15,16 +15,21 @@ const InputCrs = ({
     crsTarget,
     onChange = () => {}
 }) => {
-    const [origin, setOrigin] = useState(crsSource);
+    const [source, setSource] = useState(crsSource);
     const [target, setTarget] = useState(crsTarget);
 
+    React.useEffect(() => {
+        setSource(crsSource);
+        setTarget(crsTarget);
+    }, [crsSource, crsTarget]);
+
     const handleCrsChange = (type, value) => {
-        if (type === 'origin') {
-            setOrigin(value);
+        if (type === 'source') {
+            setSource(value);
             onChange({ crsSource: value, crsTarget: target });
         } else {
             setTarget(value);
-            onChange({ crsSource: origin, crsTarget: value });
+            onChange({ crsSource: source, crsTarget: value });
         }
     };
 
@@ -34,8 +39,8 @@ const InputCrs = ({
                 <label htmlFor="source-crs">Source CRS</label>
                 <select id="source-crs" className="form-control"
                     placeholder="Select Source CRS"
-                    onChange={(e) => handleCrsChange('origin', e.target.value)}
-                    value={origin}
+                    onChange={(e) => handleCrsChange('source', e.target.value)}
+                    value={source}
                 >
                     {crsList.map(option => (
                         <option key={option.value} value={option.value}>

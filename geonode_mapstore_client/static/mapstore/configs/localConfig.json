@@ -3692,7 +3692,7 @@
                 "name": "ReprojectionTool",
                 "cfg": {
                     "defaultInputType": "coordinates",                    
-                    "defaultCrsOrigin": "EPSG:4326",
+                    "defaultCrsSource": "EPSG:4326",
                     "defaultCrsTarget": "EPSG:3857",
                     "defaultCrsList": [
                         { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },

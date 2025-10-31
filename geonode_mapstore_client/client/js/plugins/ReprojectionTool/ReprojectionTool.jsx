@@ -56,7 +56,7 @@ import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
         "name": "ReprojectionTool",
         "cfg": {
             "defaultInputType": "coordinates",                    
-            "defaultCrsOrigin": "EPSG:4326",
+            "defaultCrsSource": "EPSG:4326",
             "defaultCrsTarget": "EPSG:3857",
             "defaultCrsList": [
                 { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
@@ -70,7 +70,7 @@ const ReprojectionTool = ({
     // setTargetCrs,
     // setGeometry
     defaultCrsList,
-    defaultCrsOrigin,
+    defaultCrsSource,
     defaultCrsTarget,
     defaultInputType = 'coordinates', // 'coordinates' | 'filelayer'
 }) => {
@@ -79,7 +79,7 @@ const ReprojectionTool = ({
     const [inputType, setInputType] = useState(defaultInputType);
 
     const [crsList, setCrsList] = useState([]);
-    const [sourceCrs, setSourceCrs] = useState(defaultCrsOrigin);
+    const [sourceCrs, setSourceCrs] = useState(defaultCrsSource);
     const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
 
     const [coordinates, setCoordinates] = useState([{lat:undefined, lon:undefined}]);
@@ -157,6 +157,14 @@ const ReprojectionTool = ({
         .catch(() => null);  
     }
 
+    const handleReset = () => {
+        setSourceCrs(defaultCrsSource);
+        setTargetCrs(defaultCrsTarget);
+        setCoordinates([{lat:undefined, lon:undefined}]);
+        setInputType(defaultInputType);
+        setResult('');        
+    }
+
     return (
         <div className="reprojection-tool">
             <div className="container-fluid d-flex justify-content-center" style={{ maxWidth: '800px' }}>
@@ -215,7 +223,7 @@ const ReprojectionTool = ({
                             />
                             <button 
                                 className="btn btn-secondary ms-2" 
-                                onClick={() => setResult('')}
+                                onClick={() => handleReset()}
                             >
                                 Reset
                             </button>
