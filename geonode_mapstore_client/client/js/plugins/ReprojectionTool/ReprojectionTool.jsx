@@ -106,7 +106,7 @@ const ReprojectionTool = ({
 
     const handleChangeCoordinates = (coordinates) => {
         setInputType('coordinates');
-        console.log('Input Coordinates', coordinates);
+        console.log('handleChangeCoordinates', coordinates);
         setCoordinates(coordinates);
     }
 
@@ -194,6 +194,9 @@ const ReprojectionTool = ({
                                 <InputCoordinates
                                     coordinates={coordinates}
                                     onChange={handleChangeCoordinates}
+                                    onValidation={() => {
+                                        console.log('validation',arguments);
+                                    }}
                                 />
                             </div>
                         </Tab>
@@ -206,7 +209,9 @@ const ReprojectionTool = ({
                 </div>
                 <div className="row mb-4 p-40">
                     <br/>
-                    <button className="btn btn-primary" onClick={handleProcess}>Send</button>
+                    <button className="btn btn-primary"
+                        onClick={handleProcess}>RUN
+                     </button>
                     <small className="text-muted"> Reproject <b>{inputType}</b> from <b>{sourceCrs}</b> to <b>{targetCrs}</b> </small>
                 </div>
                 <div className="row mb-4 p-40">

@@ -13,11 +13,12 @@ import CoordinatesEditor from '@mapstore/framework/components/mapcontrols/annota
 
 const InputCoordinates = ({
     coordinates = [],
-    format = 'decimal',
-    onChange = () => {}
+    onChange = () => {},
+    onValidation = () => {}
 }) => {
     
     const [currentCoords, setCurrentCoords] = useState(coordinates);
+    const [format, setFormat] = useState('decimal'); // 'decimal' or 'aeronautical'
 
     React.useEffect(() => {
         setCurrentCoords(coordinates);
@@ -27,7 +28,7 @@ const InputCoordinates = ({
         "MultiPoint": {
             min: 1, //specific case min is 1
             add: true,
-            remove: true, 
+            remove: true,
             validation: "validateCoordinates",
             notValid: "annotations.editor.notValidPolyline"
         }
@@ -51,6 +52,8 @@ const InputCoordinates = ({
                     components={currentCoords}
                     componentsValidation={componentsValidation}
                     onRemove={() => {}}
+                    onValidateFeature={onValidation}
+                    onChangeFormat={setFormat}
                     onChange={(components, radius, text, crs) => {
                         const validCoords = components.filter(validateLonLat);
                         if (validCoords.length !== components.length) {
