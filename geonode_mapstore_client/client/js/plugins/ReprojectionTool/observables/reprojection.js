@@ -21,13 +21,13 @@ export const reprojectGeometryXML = ({
     sourceCrs,
     targetCrs,
     geometry,
-    outputFormat = "application/wkt"
+    inputFormat = "application/wkt"
     //TODO verify output format from /geoserver/wps?service=WPS&version=2.0.0&request=DescribeProcess&identifier=gs:ReprojectGeometry
 }) => {
     const payload = [
         processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
-        processParameter('geometry', processData(complexData(cdata(geometry), outputFormat))),
+        processParameter('geometry', processData(complexData(cdata(geometry), inputFormat))),
     ];
     return executeProcessXML(
         'gs:ReprojectGeometry',
@@ -43,13 +43,15 @@ export const reprojectXML = ({
     sourceCrs,
     targetCrs,
     features,
-    outputFormat = "application/wkt"
+    inputFormat = "application/gml+xml"
 }) => {
     const payload = [
         processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
+        processParameter('features', processData(complexData(cdata(features), inputFormat))),
         //TODO features as reference layer or file GML
     ];
+    console.log('reprojectXML payload', payload);
     return executeProcessXML(
         'gs:Reproject',
         payload,

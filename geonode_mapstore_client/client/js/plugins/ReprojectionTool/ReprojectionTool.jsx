@@ -61,6 +61,9 @@ import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
             "defaultCrsList": [
                 { "value": "EPSG:4326", "label": "EPSG:4326 (WGS84)" },
                 { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
+            ],
+            "supportedFileLayerTypes": [
+                "gml","shp","geojson","json"
             ]
         }
     }
@@ -84,6 +87,7 @@ const ReprojectionTool = ({
     const [targetCrs, setTargetCrs] = useState(defaultCrsTarget);
 
     const [coordinates, setCoordinates] = useState([{lat:undefined, lon:undefined}]);
+    const [fileLayer, setFileLayer] = useState(null);
 
     const [result, setResult] = useState('');
 
@@ -116,7 +120,24 @@ const ReprojectionTool = ({
         // Convert coordinates to WKT format from [{lat:.., lon:..}, ...] lat,lon objects
         return `MULTIPOINT(${coords.map(coord => `(${coord.lon} ${coord.lat})`).join(', ')})`;
     }
-    //TODO const fileLayerToGML = (fileBin) => {}
+
+    const fileLayerToGML = async (fileBin) => {
+        if (!fileBin) return '';
+        if (typeof fileBin.text === 'function') {
+            const txt = await fileBin.text();
+            //remove first line: "<?xml version="1.0" encoding="UTF-8"?>"            
+            return txt.split(/\r?\n/).slice(1).join('\n');
+        }
+        // return new Promise((resolve, reject) => {
+        //     const reader = new FileReader();
+        //     reader.onerror = () => reject(reader.error);
+        //     reader.onload = () => {
+        //         const txt = String(reader.result || '');
+        //         resolve(txt.split(/\r?\n/).slice(1).join('\n'));
+        //     };
+        //     reader.readAsText(fileBin);
+        // });
+    };
 
     const handleChangeCrs = ({ crsSource, crsTarget }) => {
         setSourceCrs(crsSource);
@@ -130,10 +151,9 @@ const ReprojectionTool = ({
     }
 
     //TODO handle filelayer input
-    const handleChangeFileLayer = (layer) => {
+    const handleChangeFileLayer = (fileLayers) => {
         setInputType('filelayer');
-        // TODO extract convert file to gml before send to process
-        console.log('Input File Layer');
+        setFileLayer(fileLayers?.[0]);
     }
 
     /**
@@ -141,20 +161,43 @@ const ReprojectionTool = ({
         'coordinates': gs:ReprojectGeometry (format WKT)
         'filelayer': gs:Reproject (format GML)
      */
-    const handleProcess = () => {
+    const handleProcess = async () => {
         const executeOptions = {};
         setResult('');
-        const executeXml = inputType === 'coordinates' ? reprojectGeometryXML({
-            sourceCrs,
-            targetCrs,
-            geometry: coordinatesToWKT(coordinates),
-            outputFormat: 'application/wkt'
-        }) : reprojectXML({
-            sourceCrs,
-            targetCrs,
-            //TODO features: convertFileLayerToGML(),
-            outputFormat: 'application/gml'
-        });
+        let executeXml;
+        
+        switch (inputType) {
+            case 'coordinates':
+            executeXml = reprojectGeometryXML({
+                sourceCrs,
+                targetCrs,
+                geometry: coordinatesToWKT(coordinates),
+                inputFormat: 'application/wkt'
+            });
+            break;
+            
+            case 'filelayer': //embedded file in request as GML
+            executeXml = reprojectXML({
+                sourceCrs,
+                targetCrs,
+                features: await fileLayerToGML(fileLayer),
+                inputFormat: 'application/gml+xml'
+            });
+            break;
+
+            //TODO for exists layer reference
+            // case 'urllayer':
+            // executeXml = reprojectXML({
+            //     sourceCrs,
+            //     targetCrs,
+            //     // TODO: implement URL layer handling
+            // });
+            // break;
+            
+            default:
+                console.error('Unsupported input type:', inputType);
+            return;
+        }
 
         executeProcess(`${geoserverUrl}/wps`,
             executeXml,
@@ -228,8 +271,12 @@ const ReprojectionTool = ({
                         <Tab eventKey="filelayer" title="Source File Layer" style={{ minHeight: '80px' }}>
                             <div className="p-40 text-center border-dashed border-secondary">
                                 <InputFileLayer
-                                 supportedFileLayerTypes={supportedFileLayerTypes}
-                                 onChange={handleChangeFileLayer}
+                                    onNotify={onNotify}
+                                    supportedFileLayerTypes={supportedFileLayerTypes}
+                                    onChange={handleChangeFileLayer}
+                                    onAssetsUploaded={(successfulAssets) => {
+                                        console.log('file layer uploaded',successfulAssets);
+                                    }}
                                 />
                             </div>
                         </Tab>
