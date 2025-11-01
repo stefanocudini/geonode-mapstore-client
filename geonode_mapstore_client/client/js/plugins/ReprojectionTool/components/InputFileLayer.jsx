@@ -15,23 +15,22 @@ import { Glyphicon } from 'react-bootstrap';
 
 import {
     getMaxParallelUploads,
-    getMaxAllowedSizeByResourceType,
-    getSupportedDocumentTypes
+    getMaxAllowedSizeByResourceType
 } from '@js/utils/UploadUtils';
 
 const InputFileLayer = ({
+    supportedFileLayerTypes,
     onChange = () => {}
 }) => {
     
     const dropzoneRef = useRef();
 
-    const allowedDocumentTypes = getSupportedDocumentTypes();
     const maxParallelUploads = 1;
     const maxAllowedSize = getMaxAllowedSizeByResourceType() || 100; // default to 100MB
     
     const [uploading, setUploading] = useState(false);
     
-    function handleDrop() {
+    const handleDrop = (acceptedFiles, fileRejections) => {
         //TODO 
         onChange();
     }
@@ -39,12 +38,11 @@ const InputFileLayer = ({
     //Dropzone used like: geonode_mapstore_client/client/js/plugins/ResourceDetails/components/DetailsAssets.jsx
     return (
         <div className="gn-reprojection-upload">
-            <label>Drop File Layer to Upload</label>
             <Dropzone
                 ref={dropzoneRef}
                 onDrop={handleDrop}
-                accept={allowedDocumentTypes.length > 0
-                    ? allowedDocumentTypes.map(ext => `.${ext}`).join(',')
+                accept={supportedFileLayerTypes.length > 0
+                    ? supportedFileLayerTypes.map(ext => `.${ext}`).join(',')
                     : undefined
                 }
                 multiple={false}
@@ -62,7 +60,7 @@ const InputFileLayer = ({
                         <Message msgId="gnviewer.browseFile" />
                     </Button>
                     <div className="gn-upload-area-supported-file-types">
-                        <Message msgId="gnviewer.supportedFileTypes" />: {allowedDocumentTypes.join(', ')}
+                        <Message msgId="gnviewer.supportedFileTypes" />: {supportedFileLayerTypes.join(', ')}
                     </div>
                 </div>
             </Dropzone>

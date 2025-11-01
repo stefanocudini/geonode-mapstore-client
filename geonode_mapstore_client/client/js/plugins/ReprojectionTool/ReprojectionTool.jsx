@@ -73,6 +73,7 @@ const ReprojectionTool = ({
     defaultCrsSource,
     defaultCrsTarget,
     defaultInputType = 'coordinates', // 'coordinates' | 'filelayer'
+    supportedFileLayerTypes
 }) => {
     const {geoserverUrl} = getConfigProp('geoNodeSettings');
     
@@ -86,10 +87,28 @@ const ReprojectionTool = ({
 
     const [result, setResult] = useState('');
 
+    const [notifyShow, setNotifyShow] = useState(false)
+    const [notifyMsg, setNotifyMsg] = useState({message: 'MESSAGE'})
+
+    //TODO only a placeholder for MS notify system, after plugin is connected replace it
+    const onNotify = (msg = {
+        title: 'gnviewer.assetUpload',
+        message: 'gnviewer.assetUploadUnsupportedFormatError'
+    }, type = 'warning') => {
+        setNotifyMsg({message: msg.message});
+        setNotifyShow(true);
+        setTimeout(() => {
+            setNotifyShow(false);
+        }, 4000);
+    }
+
     React.useEffect(() => {
         //TODO fetch from geoserver GetCapabilities
         setTimeout(() => {
             setCrsList(defaultCrsList);
+            onNotify({
+                message: 'CRS list loaded from configuration.'
+            });
         }, 800);
     }, []);
 
@@ -173,8 +192,14 @@ const ReprojectionTool = ({
                         <h3>Reprojection Tool</h3>
                         <p className="text-muted">
                             Convert coordinates or file between different reference systems.
-                            <br/><br/>
                         </p>
+                        <div className="alert alert-warning" role="alert"
+                            style={{visibility: notifyShow ? 'visible' : 'hidden'}}
+                        >
+                            <span className="alert-body">
+                                <span>{notifyMsg?.message}</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="row mb-4 p-20">
@@ -202,7 +227,10 @@ const ReprojectionTool = ({
                         </Tab>
                         <Tab eventKey="filelayer" title="Source File Layer" style={{ minHeight: '80px' }}>
                             <div className="p-40 text-center border-dashed border-secondary">
-                                <InputFileLayer onChange={handleChangeFileLayer} />
+                                <InputFileLayer
+                                 supportedFileLayerTypes={supportedFileLayerTypes}
+                                 onChange={handleChangeFileLayer}
+                                />
                             </div>
                         </Tab>
                     </Tabs>
@@ -222,7 +250,7 @@ const ReprojectionTool = ({
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}
-                                rows={5}
+                                rows={3}
                                 value={result}
                                 className="reprojection-result w-100 border rounded-lg font-mono"
                             />
