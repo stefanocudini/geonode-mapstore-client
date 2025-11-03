@@ -106,7 +106,7 @@ const InputFileLayer = ({
     //Dropzone used like:
     // geonode_mapstore_client/client/js/plugins/ResourceDetails/components/DetailsAssets.jsx
     return (
-        <div className="gn-reprojection-upload text-center">
+        <div className="gn-reprojection-upload">
             {uploading && <div className="text-center">
                 <Loader size={50} style={{margin: 0, auto: 'auto'}}   />
                 <label>Processing file.. {fileLayer?.name}</label>
@@ -123,7 +123,7 @@ const InputFileLayer = ({
                     : undefined
                 }
                 multiple={false}
-                className="gn-upload-dropzone"
+                className="gn-upload-dropzone text-center"
                 activeClassName="gn-dropzone-active"
                 rejectClassName="gn-dropzone-reject"
             >

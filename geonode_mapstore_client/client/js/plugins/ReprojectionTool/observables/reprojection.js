@@ -38,24 +38,33 @@ export const reprojectGeometryXML = ({
     );
 };
 
-
+/**
+ *
+ * @param forcedCRS	Coordinate reference system to use for input feature collection (overrides native one)
+ * @param features	The feature collection that will be reprojected	SimpleFeatureCollection
+ * @returns
+ */
 export const reprojectXML = ({
+    forcedCrs = false,
     sourceCrs,
     targetCrs,
     features,
     inputFormat = "application/json"
-}) => {
+}) => {    
     const payload = [
-        //processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
         processParameter('features',  processData(complexData(cdata(features), inputFormat))),
     ];
-    console.log('reprojectXML payload', payload[2]);
+    if(forcedCrs) {
+        payload.push(processParameter('forcedCRS', processData(literalData(sourceCrs))));
+    }
+
+    console.log('reprojectXML payload', payload);
     return executeProcessXML(
         'gs:Reproject',
         payload,
         responseForm(
-            rawDataOutput('result', inputFormat)
+            rawDataOutput('result', "application/json")
         )
     );
 };

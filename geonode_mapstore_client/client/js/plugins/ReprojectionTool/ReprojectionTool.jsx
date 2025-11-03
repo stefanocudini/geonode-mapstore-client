@@ -89,6 +89,7 @@ const ReprojectionTool = ({
 
     const [coordinates, setCoordinates] = useState([{lat:undefined, lon:undefined}]);
     const [fileLayer, setFileLayer] = useState(null);
+    const [forcedCrs, setForcedCrs] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState('');
@@ -138,10 +139,10 @@ const ReprojectionTool = ({
             
             // //TODO force sourceCRS change it:
             // "crs": {
-            // "type": "name",
-            // "properties": {
-            // "name": "EPSG:4326"
-            // }
+            //   "type": "name",
+            //   "properties": {
+            //     "name": "EPSG:4326"
+            //   }
             // },
 
             const jsonpayload = JSON.parse(await fileLayer.text());
@@ -160,28 +161,28 @@ const ReprojectionTool = ({
         setCoordinates(coordinates);
     }
 
-    const handleChangeFileLayer = async (fileLayers) => {
+    const handleChangeFileLayer = async (files) => {
         setInputType('filelayer');
+        setFileLayer(files?.[0]);
 
-        const file = fileLayers?.[0]
-        setFileLayer(file);
-        
         //TODO process file and return promise
-        console.log('handleChangeFileLayer', file);
+        console.log('handleChangeFileLayer', fileLayer);
 
         return Promise.resolve();
     }
 
-    /**
-     * request process by inputType:
-        'coordinates': gs:ReprojectGeometry (format WKT)
-        'filelayer': gs:Reproject (format GML)
-     */
     const handleProcess = async () => {
         const executeOptions = {};
         setResult('');
         let executeXml;
         
+        console.log('handleProcess', {
+            inputType,
+            sourceCrs,
+            targetCrs,
+            forcedCrs
+        }
+        );
         switch (inputType) {
             case 'coordinates':
             executeXml = reprojectGeometryXML({
@@ -192,8 +193,9 @@ const ReprojectionTool = ({
             });
             break;
 
-            case 'filelayer': //embedded file in request as GML or GeoJSON
+            case 'filelayer':
             executeXml = reprojectXML({
+                forcedCrs,
                 sourceCrs,
                 targetCrs,
                 features: await fileLayerToPayload(fileLayer),
@@ -226,7 +228,7 @@ const ReprojectionTool = ({
             })
         .toPromise()
         .then(response => {
-            if(inputType === 'filelayer') {
+            if(typeof response === 'object' && response !== null) {
                 response = JSON.stringify(response, null, 2);
             }
             setResult(response);
@@ -295,6 +297,18 @@ const ReprojectionTool = ({
                                     supportedFileLayerTypes={supportedFileLayerTypes}
                                     onChange={handleChangeFileLayer}
                                 />
+
+                                <div className="gn-force-crs-checkbox text-left" style={{ marginBottom: '10px' }}>
+                                    <input
+                                        type="checkbox"
+                                        id="forceCrs"
+                                        checked={forcedCrs}
+                                        onChange={(e) => setForcedCrs(e.target.checked)}
+                                    />
+                                    <label htmlFor="forceCrs" style={{ marginLeft: '5px' }}>
+                                        Force source CRS in file
+                                    </label>
+                                </div>                                
                             </div>
                         </Tab>
                     </Tabs>
@@ -318,7 +332,7 @@ const ReprojectionTool = ({
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}
-                                rows={3}
+                                rows={5}
                                 value={result}
                                 className="reprojection-result w-100 border rounded-lg font-mono"
                             />
