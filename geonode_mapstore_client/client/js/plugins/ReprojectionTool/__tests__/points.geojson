@@ -55,61 +55,6 @@
                 "id": 5,
                 "name": "Point 5"
             }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [11.003, 43.006]
-            },
-            "properties": {
-                "id": 6,
-                "name": "Point 6"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [10.998, 42.995]
-            },
-            "properties": {
-                "id": 7,
-                "name": "Point 7"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [11.007, 43.004]
-            },
-            "properties": {
-                "id": 8,
-                "name": "Point 8"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [10.996, 43.001]
-            },
-            "properties": {
-                "id": 9,
-                "name": "Point 9"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [11.002, 42.999]
-            },
-            "properties": {
-                "id": 10,
-                "name": "Point 10"
-            }
         }
     ]
 }

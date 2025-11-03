@@ -123,23 +123,21 @@ const ReprojectionTool = ({
         return `MULTIPOINT(${coords.map(coord => `(${coord.lon} ${coord.lat})`).join(', ')})`;
     }
 
-    const fileLayerToPayload = async (fileBin) => {
-        
+    const fileLayerToPayload = async () => {
+
         let payload = '';
-        if (!fileBin) payload = '';
-        
-        if(fileBin.type === 'application/gml+xml' || fileBin.name?.toLowerCase().endsWith('.gml')) {
-            const txt = await fileBin.text();
+        if (!fileLayer) payload = '';
+
+        if(fileLayer.type === 'application/gml+xml' || fileLayer.name?.toLowerCase().endsWith('.gml')) {
+            const txt = await fileLayer.text();
             //remove first line: "<?xml version="1.0" encoding="UTF-8"?>"            
             payload = txt.split(/\r?\n/).slice(1).join('\n');
-        } else if(  fileBin.type === 'application/geo+json' || 
-                    ['.json', '.geojson'].some(ext => fileBin.name?.toLowerCase().endsWith(ext))
+        } else if(  fileLayer.type === 'application/geo+json' || 
+                    ['.json', '.geojson'].some(ext => fileLayer.name?.toLowerCase().endsWith(ext))
                 ) {
-            const jsonpayload = JSON.parse(await fileBin.text());
+            const jsonpayload = JSON.parse(await fileLayer.text());
             payload = JSON.stringify(jsonpayload);
         }
-        
-        console.log('fileLayerToPayload', payload);
         return payload;
     };
 
@@ -219,6 +217,9 @@ const ReprojectionTool = ({
             })
         .toPromise()
         .then(response => {
+            if(inputType === 'filelayer') {
+                response = JSON.stringify(response, null, 2);
+            }
             setResult(response);
             show({
                 title: 'Processed completed',

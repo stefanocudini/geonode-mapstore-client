@@ -46,16 +46,16 @@ export const reprojectXML = ({
     inputFormat = "application/json"
 }) => {
     const payload = [
-        processParameter('sourceCRS', processData(literalData(sourceCrs))),
+        //processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
         processParameter('features',  processData(complexData(cdata(features), inputFormat))),
     ];
-    console.log('reprojectXML payload', payload);
+    console.log('reprojectXML payload', payload[2]);
     return executeProcessXML(
         'gs:Reproject',
         payload,
         responseForm(
-            rawDataOutput('result', "application/wkt")
+            rawDataOutput('result', inputFormat)
         )
     );
 };
