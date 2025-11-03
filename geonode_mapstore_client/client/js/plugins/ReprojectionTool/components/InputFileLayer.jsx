@@ -53,7 +53,7 @@ const InputFileLayer = ({
     const maxAllowedSize = getMaxAllowedSizeByResourceType() || 100; // default to 100MB
     
     const [uploading, setUploading] = useState(false);
-    
+    const [fileLayer, setFileLayer] = useState(null);
 
     const validateFiles = useCallback((files) => {
         // Check parallel upload limit
@@ -86,6 +86,7 @@ const InputFileLayer = ({
     
     const handleFileUpload = useCallback((files) => {
         setUploading(true);
+        setFileLayer(files?.[0]);
         // uploadAsset(resourcePk, file)
         //              .then((asset) =>
         //                 ({...getAssetUrls(asset), title: file.name})
@@ -94,7 +95,7 @@ const InputFileLayer = ({
             .then(() => {
                 //file processed on WPS
             }).finally(() => {
-                setUploading(false);
+                //setUploading(false);
             });
         
     }, []);
@@ -128,7 +129,9 @@ const InputFileLayer = ({
     return (
         <div className="gn-reprojection-upload text-center">
             {uploading && <div className="text-center">
-                <Loader size={50} />
+                <Loader size={50} style={{margin: 0, auto: 'auto'}}   />
+                <label>Processing file.. {fileLayer?.name}</label>
+                <br />
             </div>}
 
             <Dropzone
