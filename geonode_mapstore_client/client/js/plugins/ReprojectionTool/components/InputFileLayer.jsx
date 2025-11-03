@@ -24,23 +24,6 @@ import {
     getMaxAllowedSizeByResourceType,
 } from '@js/utils/UploadUtils';
 
-// Get asset download and link URLs
-const getAssetUrls = (assetData = {}) => {
-    const { asset_id: assetId, link_id: linkId } = assetData;
-    const baseUrl = getEndpointUrl(ASSETS);
-    return {
-        downloadUrl: assetId ? `${baseUrl}/${assetId}/download` : null,
-        linkUrl: linkId ? `${baseUrl}/${linkId}/link` : null
-    };
-};
-
-// Extract asset ID from download URL
-const extractAssetIdFromUrl = (url) => {
-    if (!url || typeof url !== 'string') return null;
-    const match = url.match(/\/assets\/(\d+)\//);
-    return match ? parseInt(match[1], 10) : null;
-};
-
 const InputFileLayer = ({
     supportedFileLayerTypes,
     onChange = () => {},
@@ -87,15 +70,11 @@ const InputFileLayer = ({
     const handleFileUpload = useCallback((files) => {
         setUploading(true);
         setFileLayer(files?.[0]);
-        // uploadAsset(resourcePk, file)
-        //              .then((asset) =>
-        //                 ({...getAssetUrls(asset), title: file.name})
-        //              )
         onChange(files)
             .then(() => {
                 //file processed on WPS
             }).finally(() => {
-                //setUploading(false);
+                setUploading(false);
             });
         
     }, []);

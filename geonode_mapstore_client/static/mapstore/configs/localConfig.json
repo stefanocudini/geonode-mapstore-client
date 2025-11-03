@@ -3699,7 +3699,7 @@
                         { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
                     ],
                     "supportedFileLayerTypes": [
-                        "gml","geojson","json","kml"
+                        "geojson","json","kml","gml"
                     ]
                 }
             }

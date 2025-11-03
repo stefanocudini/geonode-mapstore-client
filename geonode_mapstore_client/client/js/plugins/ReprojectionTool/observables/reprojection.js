@@ -43,13 +43,12 @@ export const reprojectXML = ({
     sourceCrs,
     targetCrs,
     features,
-    inputFormat = "application/gml+xml"
+    inputFormat = "application/json"
 }) => {
     const payload = [
         processParameter('sourceCRS', processData(literalData(sourceCrs))),
         processParameter('targetCRS', processData(literalData(targetCrs))),
-        processParameter('features', processData(complexData(cdata(features), inputFormat))),
-        //TODO features as reference layer or file GML
+        processParameter('features',  processData(complexData(cdata(features), inputFormat))),
     ];
     console.log('reprojectXML payload', payload);
     return executeProcessXML(

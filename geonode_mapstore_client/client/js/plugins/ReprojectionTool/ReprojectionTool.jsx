@@ -10,7 +10,8 @@ import { createPlugin } from '@mapstore/framework/utils/PluginsUtils';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { Form, FormGroup, ControlLabel, InputGroup, Tabs, Tab } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, Glyphicon, InputGroup, Tabs, Tab } from 'react-bootstrap';
+import Loader from '@mapstore/framework/components/misc/Loader';
 
 import { show } from '@mapstore/framework/actions/notifications';
 import executeProcess from '@mapstore/framework/observables/wps/execute';
@@ -63,7 +64,7 @@ import { getConfigProp } from '@mapstore/framework/utils/ConfigUtils';
                 { "value": "EPSG:3857", "label": "EPSG:3857 (Web Mercator)" }
             ],
             "supportedFileLayerTypes": [
-                "gml","shp","geojson","json"
+                "geojson","json","kml","shp"
             ]
         }
     }
@@ -89,6 +90,7 @@ const ReprojectionTool = ({
     const [coordinates, setCoordinates] = useState([{lat:undefined, lon:undefined}]);
     const [fileLayer, setFileLayer] = useState(null);
 
+    const [loading, setLoading] = useState(false);
     const [result, setResult] = useState('');
 
     const [notifyShow, setNotifyShow] = useState(false)
@@ -121,15 +123,23 @@ const ReprojectionTool = ({
         return `MULTIPOINT(${coords.map(coord => `(${coord.lon} ${coord.lat})`).join(', ')})`;
     }
 
-    const fileLayerToGML = async (fileBin) => {
+    const fileLayerToPayload = async (fileBin) => {
+        
         let payload = '';
         if (!fileBin) payload = '';
-        if (typeof fileBin.text === 'function') {
+        
+        if(fileBin.type === 'application/gml+xml' || fileBin.name?.toLowerCase().endsWith('.gml')) {
             const txt = await fileBin.text();
             //remove first line: "<?xml version="1.0" encoding="UTF-8"?>"            
             payload = txt.split(/\r?\n/).slice(1).join('\n');
+        } else if(  fileBin.type === 'application/geo+json' || 
+                    ['.json', '.geojson'].some(ext => fileBin.name?.toLowerCase().endsWith(ext))
+                ) {
+            const jsonpayload = JSON.parse(await fileBin.text());
+            payload = JSON.stringify(jsonpayload);
         }
-        console.log('fileLayeToGML', payload);
+        
+        console.log('fileLayerToPayload', payload);
         return payload;
     };
 
@@ -179,8 +189,8 @@ const ReprojectionTool = ({
             executeXml = reprojectXML({
                 sourceCrs,
                 targetCrs,
-                features: await fileLayerToGML(fileLayer),
-                inputFormat: 'application/gml+xml'
+                features: await fileLayerToPayload(fileLayer),
+                inputFormat: 'application/json'
             });
             break;
 
@@ -189,7 +199,7 @@ const ReprojectionTool = ({
             // executeXml = reprojectXML({
             //     sourceCrs,
             //     targetCrs,
-            //     // TODO: implement URL layer handling
+            //     //layer TODO: implement URL layer/dataset as reference in request
             // });
             // break;
             
@@ -221,8 +231,9 @@ const ReprojectionTool = ({
     const handleReset = () => {
         setSourceCrs(defaultCrsSource);
         setTargetCrs(defaultCrsTarget);
-        setCoordinates([{lat:undefined, lon:undefined}]);
         setInputType(defaultInputType);
+        setCoordinates([{lat:undefined, lon:undefined}]);
+        setFileLayer(null);        
         setResult('');        
     }
 
@@ -261,9 +272,9 @@ const ReprojectionTool = ({
                                 <InputCoordinates
                                     coordinates={coordinates}
                                     onChange={handleChangeCoordinates}
-                                    onValidation={() => {
-                                        console.log('validation',arguments);
-                                    }}
+                                    // onValidation={() => {
+                                    //     console.log('validation',arguments);
+                                    // }}
                                 />
                             </div>
                         </Tab>
@@ -273,9 +284,6 @@ const ReprojectionTool = ({
                                     onNotify={onNotify}
                                     supportedFileLayerTypes={supportedFileLayerTypes}
                                     onChange={handleChangeFileLayer}
-                                    onAssetsUploaded={(successfulAssets) => {
-                                        console.log('file layer uploaded',successfulAssets);
-                                    }}
                                 />
                             </div>
                         </Tab>
@@ -289,6 +297,10 @@ const ReprojectionTool = ({
                     <small className="text-muted"> Reproject <b>{inputType}</b> from <b>{sourceCrs}</b> to <b>{targetCrs}</b> </small>
                 </div>
                 <div className="row mb-4 p-40">
+                    {!result && loading && (
+                        <Loader size={50} style={{margin: 0, auto: 'auto'}}   />
+                    )}
+
                     {result && (
                         <FormGroup>
                             <br/>
