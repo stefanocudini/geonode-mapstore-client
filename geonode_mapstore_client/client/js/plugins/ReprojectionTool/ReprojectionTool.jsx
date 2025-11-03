@@ -135,6 +135,15 @@ const ReprojectionTool = ({
         } else if(  fileLayer.type === 'application/geo+json' || 
                     ['.json', '.geojson'].some(ext => fileLayer.name?.toLowerCase().endsWith(ext))
                 ) {
+            
+            // //TODO force sourceCRS change it:
+            // "crs": {
+            // "type": "name",
+            // "properties": {
+            // "name": "EPSG:4326"
+            // }
+            // },
+
             const jsonpayload = JSON.parse(await fileLayer.text());
             payload = JSON.stringify(jsonpayload);
         }
