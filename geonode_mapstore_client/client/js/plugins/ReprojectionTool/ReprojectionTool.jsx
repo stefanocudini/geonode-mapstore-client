@@ -122,21 +122,15 @@ const ReprojectionTool = ({
     }
 
     const fileLayerToGML = async (fileBin) => {
-        if (!fileBin) return '';
+        let payload = '';
+        if (!fileBin) payload = '';
         if (typeof fileBin.text === 'function') {
             const txt = await fileBin.text();
             //remove first line: "<?xml version="1.0" encoding="UTF-8"?>"            
-            return txt.split(/\r?\n/).slice(1).join('\n');
+            payload = txt.split(/\r?\n/).slice(1).join('\n');
         }
-        // return new Promise((resolve, reject) => {
-        //     const reader = new FileReader();
-        //     reader.onerror = () => reject(reader.error);
-        //     reader.onload = () => {
-        //         const txt = String(reader.result || '');
-        //         resolve(txt.split(/\r?\n/).slice(1).join('\n'));
-        //     };
-        //     reader.readAsText(fileBin);
-        // });
+        console.log('fileLayeToGML', payload);
+        return payload;
     };
 
     const handleChangeCrs = ({ crsSource, crsTarget }) => {
@@ -146,14 +140,17 @@ const ReprojectionTool = ({
 
     const handleChangeCoordinates = (coordinates) => {
         setInputType('coordinates');
-        console.log('handleChangeCoordinates', coordinates);
         setCoordinates(coordinates);
     }
 
-    //TODO handle filelayer input
-    const handleChangeFileLayer = (fileLayers) => {
+    const handleChangeFileLayer = async (fileLayers) => {
         setInputType('filelayer');
         setFileLayer(fileLayers?.[0]);
+        
+        //TODO process file and return promise
+        console.log('handleChangeFileLayer', fileLayer);
+
+        return Promise.resolve();
     }
 
     /**
@@ -175,8 +172,8 @@ const ReprojectionTool = ({
                 inputFormat: 'application/wkt'
             });
             break;
-            
-            case 'filelayer': //embedded file in request as GML
+
+            case 'filelayer': //embedded file in request as GML or GeoJSON
             executeXml = reprojectXML({
                 sourceCrs,
                 targetCrs,

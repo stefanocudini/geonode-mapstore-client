@@ -9,12 +9,15 @@ import React, { useState, useRef, useCallback} from 'react';
 import Message from '@mapstore/framework/components/I18N/Message';
 import HTML from '@mapstore/framework/components/I18N/HTML';
 import Button from '@mapstore/framework/components/layout/Button';
+import Loader from '@mapstore/framework/components/misc/Loader';
 import { Glyphicon } from 'react-bootstrap';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import Dropzone from 'react-dropzone';
 
 import { uploadAsset } from '@js/api/geonode/v2';
+// https://docs.geonode.org/en/master/devel/api/usage/index.html#assets-upload
+
 import { ASSETS, getEndpointUrl } from '@js/api/geonode/v2/constants';
 import { getFileNameParts } from '@js/utils/FileUtils';
 import {
@@ -31,13 +34,6 @@ const getAssetUrls = (assetData = {}) => {
     };
 };
 
-// Make safe call, handling partial success and errors
-const safe = (promise) => {
-    return promise
-        .then(result => ({ status: "fulfilled", value: result }))
-        .catch(error => ({ status: "rejected", reason: error }));
-};
-
 // Extract asset ID from download URL
 const extractAssetIdFromUrl = (url) => {
     if (!url || typeof url !== 'string') return null;
@@ -48,8 +44,7 @@ const extractAssetIdFromUrl = (url) => {
 const InputFileLayer = ({
     supportedFileLayerTypes,
     onChange = () => {},
-    onNotify = () => {},
-    onAssetsUploaded = () => {},
+    onNotify = () => {}
 }) => {
     
     const dropzoneRef = useRef();
@@ -90,49 +85,20 @@ const InputFileLayer = ({
     }, [maxParallelUploads, maxAllowedSize]);
     
     const handleFileUpload = useCallback((files) => {
+        const file = files?.[0];
         setUploading(true);
-        onChange(files);
-        // // Make safe the uploadAsset call, handling partial success and errors
-        // Promise.all(
-        //     files.map((file) =>
-        //         safe(uploadAsset(resourcePk, file)
-        //             .then((asset) =>
+        // uploadAsset(resourcePk, file)
+        //              .then((asset) =>
         //                 ({...getAssetUrls(asset), title: file.name})
-        //             ))
-        //     ))
-        //     .then((assets) => {
-        //         let successfulAssets = [];
-        //         let rejectedAssets = [];
-        //         assets.forEach(({ status, value, reason }) =>
-        //             status === "fulfilled"
-        //                 ? successfulAssets.push(value)
-        //                 : rejectedAssets.push(reason)
-        //         );
-        //         const isPartialSuccess = !isEmpty(successfulAssets) && !isEmpty(rejectedAssets);
-        //         // Handle rejected assets & partial success
-        //         if (!isEmpty(rejectedAssets)) {
-        //             onNotify({
-        //                 title: 'gnviewer.assetUpload',
-        //                 message: `gnviewer.${isPartialSuccess
-        //                     ? 'assetUploadPartialErrorMessage'
-        //                     : 'assetUploadErrorMessage'}`
-        //             }, isPartialSuccess ? 'warning' : 'error');
-        //         }
-        //         // Handle successful assets
-        //         if (!isEmpty(successfulAssets)) {
-        //             onAssetsUploaded(successfulAssets);
-        //             if (!isPartialSuccess) {
-        //                 onNotify({
-        //                     title: 'gnviewer.assetUpload',
-        //                     message: 'gnviewer.assetUploadSuccessMessage'
-        //                 }, 'success');
-        //             }
-        //         }
-        //     })
-        //     .finally(() => {
-        //         setUploading(false);
-        //     });
-    }, [onNotify, onAssetsUploaded]);
+        //              )
+        onChange(file)
+            .then(() => {
+                //file processed on WPS
+            }).finally(() => {
+                setUploading(false);
+            });
+        
+    }, []);
 
     const handleDrop = (acceptedFiles, fileRejections) => {
 
@@ -158,10 +124,17 @@ const InputFileLayer = ({
         }
     };
 
-    //Dropzone used like: geonode_mapstore_client/client/js/plugins/ResourceDetails/components/DetailsAssets.jsx
+    //Dropzone used like:
+    // geonode_mapstore_client/client/js/plugins/ResourceDetails/components/DetailsAssets.jsx
     return (
-        <div className="gn-reprojection-upload">
+        <div className="gn-reprojection-upload text-center">
+            {uploading && <div className="text-center">
+                <Loader size={50} />
+            </div>}
+
             <Dropzone
+                style={{opacity: uploading ? 0.5 : 1}}
+                disabled={uploading}
                 ref={dropzoneRef}
                 onDrop={handleDrop}
                 accept={supportedFileLayerTypes.length > 0
@@ -169,7 +142,6 @@ const InputFileLayer = ({
                     : undefined
                 }
                 multiple={false}
-                disabled={uploading}
                 className="gn-upload-dropzone"
                 activeClassName="gn-dropzone-active"
                 rejectClassName="gn-dropzone-reject"
