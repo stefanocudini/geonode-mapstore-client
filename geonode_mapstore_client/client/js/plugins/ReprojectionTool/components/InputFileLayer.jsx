@@ -85,13 +85,12 @@ const InputFileLayer = ({
     }, [maxParallelUploads, maxAllowedSize]);
     
     const handleFileUpload = useCallback((files) => {
-        const file = files?.[0];
         setUploading(true);
         // uploadAsset(resourcePk, file)
         //              .then((asset) =>
         //                 ({...getAssetUrls(asset), title: file.name})
         //              )
-        onChange(file)
+        onChange(files)
             .then(() => {
                 //file processed on WPS
             }).finally(() => {

@@ -145,10 +145,12 @@ const ReprojectionTool = ({
 
     const handleChangeFileLayer = async (fileLayers) => {
         setInputType('filelayer');
-        setFileLayer(fileLayers?.[0]);
+
+        const file = fileLayers?.[0]
+        setFileLayer(file);
         
         //TODO process file and return promise
-        console.log('handleChangeFileLayer', fileLayer);
+        console.log('handleChangeFileLayer', file);
 
         return Promise.resolve();
     }
