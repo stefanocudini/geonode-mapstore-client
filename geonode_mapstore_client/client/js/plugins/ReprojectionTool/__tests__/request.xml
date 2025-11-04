@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:dwn="http://geoserver.org/wps/download" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">
+	<Identifier>
+		gs:Reproject
+	</Identifier>
+	<DataInputs>
+		<Input>
+			<Identifier>
+				forcedCRS
+			</Identifier>
+			<Data>
+				<LiteralData>
+					EPSG:4326
+				</LiteralData>
+			</Data>
+		</Input>
+		<Input>
+			<Identifier>
+				targetCRS
+			</Identifier>
+			<Data>
+				<LiteralData>
+					EPSG:4326
+				</LiteralData>
+			</Data>
+		</Input>
+		<Input>
+			<Identifier>
+				features
+			</Identifier>
+			<Data>
+				<ComplexData mimeType="application/json">
+					<![CDATA[{"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"EPSG:4326"}},"features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[11.001,43.002]},"properties":{"id":1,"name":"Point 1"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[11.005,42.998]},"properties":{"id":2,"name":"Point 2"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[10.995,43.003]},"properties":{"id":3,"name":"Point 3"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[11.008,43.001]},"properties":{"id":4,"name":"Point 4"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[10.992,42.997]},"properties":{"id":5,"name":"Point 5"}}]}]]>
+				</ComplexData>
+			</Data>
+		</Input>
+	</DataInputs>
+	<ResponseForm>
+		<RawDataOutput mimeType="GML2">
+			<Identifier>
+				result
+			</Identifier>
+		</RawDataOutput>
+	</ResponseForm>
+</Execute>
