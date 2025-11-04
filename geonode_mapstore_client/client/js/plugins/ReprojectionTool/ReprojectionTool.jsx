@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, GeoSolutions Sas.
+ * Copyright 2025, GeoSolutions Sas.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -16,6 +16,7 @@ import Loader from '@mapstore/framework/components/misc/Loader';
 import { show } from '@mapstore/framework/actions/notifications';
 import executeProcess from '@mapstore/framework/observables/wps/execute';
 
+import {convertWFS2GeoJSON} from './components/convertions';
 
 import {reprojectGeometryXML, reprojectXML} from './observables/reprojection'
 
@@ -97,7 +98,7 @@ const ReprojectionTool = ({
     const [notifyShow, setNotifyShow] = useState(false)
     const [notifyMsg, setNotifyMsg] = useState({message: 'MESSAGE'})
 
-    //TODO only a placeholder for MS notify system, after plugin is connected replace it
+    //TODO only a placeholder for MS notify system
     const onNotify = (msg = {
         title: 'gnviewer.assetUpload',
         message: 'gnviewer.assetUploadUnsupportedFormatError'
@@ -110,12 +111,11 @@ const ReprojectionTool = ({
     }
 
     React.useEffect(() => {
-        //TODO fetch from geoserver GetCapabilities
         setTimeout(() => {
             setCrsList(defaultCrsList);
-            onNotify({
-                message: 'CRS list loaded from configuration.'
-            });
+            // onNotify({
+            //     message: 'CRS list loaded from configuration.'
+            // });
         }, 800);
     }, []);
 
@@ -133,7 +133,7 @@ const ReprojectionTool = ({
             const txt = await fileLayer.text();
             //remove first line: "<?xml version="1.0" encoding="UTF-8"?>"            
             payload = txt.split(/\r?\n/).slice(1).join('\n');
-        } else if(  fileLayer.type === 'application/geo+json' || 
+        } else if( fileLayer.type === 'application/geo+json' || 
                     ['.json', '.geojson'].some(ext => fileLayer.name?.toLowerCase().endsWith(ext))
                 ) {
             
@@ -176,13 +176,6 @@ const ReprojectionTool = ({
         setResult('');
         let executeXml;
         
-        console.log('handleProcess', {
-            inputType,
-            sourceCrs,
-            targetCrs,
-            forcedCrs
-        }
-        );
         switch (inputType) {
             case 'coordinates':
             executeXml = reprojectGeometryXML({
@@ -228,14 +221,17 @@ const ReprojectionTool = ({
             })
         .toPromise()
         .then(response => {
-            if(typeof response === 'object' && response !== null) {
-                response = JSON.stringify(response, null, 2);
+            let resultText = '';
+            
+            if (inputType === 'filelayer') {
+                resultText = convertWFS2GeoJSON(response);
             }
-            setResult(response);
-            show({
-                title: 'Processed completed',
-                message: 'converted successfully',
-            })
+            else if (inputType === 'coordinates') {
+                resultText = response;
+            }
+            // console.log('Convert Result:', responseText);
+            
+            setResult(resultText);
         })
         .catch(() => null);  
     }
@@ -328,7 +324,7 @@ const ReprojectionTool = ({
                     {result && (
                         <FormGroup>
                             <br/>
-                            <ControlLabel>Reprojection Result (WKT format)</ControlLabel>
+                            <ControlLabel>Reprojection Result</ControlLabel>
                             <br/>
                             <textarea style={{ width: '100%' }}
                                 onClick={(e) => e.target.select()}

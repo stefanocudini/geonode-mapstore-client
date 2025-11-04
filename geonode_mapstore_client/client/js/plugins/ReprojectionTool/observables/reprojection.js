@@ -60,13 +60,11 @@ export const reprojectXML = ({
         processParameter('features',  processData(complexData(cdata(features), inputFormat))),
     );
 
-
-    console.log('reprojectXML payload', payload);
     return executeProcessXML(
         'gs:Reproject',
         payload,
         responseForm(
-            rawDataOutput('result', "application/wkt")
+            rawDataOutput('result', "GML2")
         )
     );
 };
