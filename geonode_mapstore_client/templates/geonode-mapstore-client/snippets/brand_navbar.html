@@ -110,8 +110,8 @@
                 // Clone and add all menu items to bottom menu
                 menuItems.forEach(item => {
                     const clone = item.cloneNode(true);
-                    
-                    if (clone.tagName === 'LI') {
+                    const hasDropdown = clone.tagName === 'LI' && (clone.querySelector('.dropdown') || clone.querySelector('.dropdown-toggle'));
+                    if (clone.tagName === 'LI' && !hasDropdown) {
                         menuBottomUl.appendChild(clone);
 
                         const dropdownButton = clone.querySelector('.dropdown button') || clone.querySelector('.dropdown-toggle');
@@ -125,40 +125,41 @@
                                 }
                             });
                         }
+                    //}
+                    } else { // NOTE: This condition is never reached.  ???
+                        //const items = clone.querySelectorAll(':scope > li');
+                        const items = clone.tagName === 'LI' ? [clone] : clone.querySelectorAll(':scope > li');
+                        items.forEach(item => {
+                            const dropdownButton = item.querySelector('.dropdown button') || item.querySelector('.dropdown-toggle');
+                            if (dropdownButton) {
+                                // Create a new span with bold text
+                                const buttonText = dropdownButton.textContent.trim();
+                                const boldSpan = document.createElement('span');
+                                boldSpan.className = "dropdown-submenu-title";
+                                boldSpan.textContent = buttonText;
+                                
+                                // Add the bold span as a list item
+                                const headerLi = document.createElement('li');
+                                headerLi.appendChild(boldSpan);
+                                appendDivider();
+                                menuBottomUl.appendChild(headerLi);
+                                appendDivider();
+                                
+                                // Get all child items from the dropdown menu
+                                const childItems = item.querySelectorAll('.dropdown-menu > li') || item.querySelectorAll('ul > li');
+                                if (childItems) {
+                                    childItems.forEach(childItem => {
+                                        const _childItem = childItem.cloneNode(true);
+                                        _childItem.className = `${_childItem.className} dropdown-submenu`;
+                                        menuBottomUl.appendChild(_childItem);
+                                    });
+                                }
+                                appendDivider();
+                            } else if (item.tagName === 'LI') {
+                                menuBottomUl.appendChild(item);
+                            }
+                        });
                     }
-                    // } else { // NOTE: This condition is never reached.  ???
-                    //     const items = clone.querySelectorAll(':scope > li');
-                    //     items.forEach(item => {
-                    //         const dropdownButton = item.querySelector('.dropdown button') || item.querySelector('.dropdown-toggle');
-                    //         if (dropdownButton) {
-                    //             // Create a new span with bold text
-                    //             const buttonText = dropdownButton.textContent.trim();
-                    //             const boldSpan = document.createElement('span');
-                    //             boldSpan.className = "dropdown-submenu-title";
-                    //             boldSpan.textContent = buttonText;
-                                
-                    //             // Add the bold span as a list item
-                    //             const headerLi = document.createElement('li');
-                    //             headerLi.appendChild(boldSpan);
-                    //             appendDivider();
-                    //             menuBottomUl.appendChild(headerLi);
-                    //             appendDivider();
-                                
-                    //             // Get all child items from the dropdown menu
-                    //             const childItems = item.querySelectorAll('.dropdown-menu > li') || item.querySelectorAll('ul > li');
-                    //             if (childItems) {
-                    //                 childItems.forEach(childItem => {
-                    //                     const _childItem = childItem.cloneNode(true);
-                    //                     _childItem.className = `${_childItem.className} dropdown-submenu`;
-                    //                     menuBottomUl.appendChild(_childItem);
-                    //                 });
-                    //             }
-                    //             appendDivider();
-                    //         } else if (item.tagName === 'LI') {
-                    //             menuBottomUl.appendChild(item);
-                    //         }
-                    //     });
-                    // }
                 });
             }
 
