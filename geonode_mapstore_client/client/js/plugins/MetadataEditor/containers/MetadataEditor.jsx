@@ -163,6 +163,7 @@ function MetadataEditor({
 
     /**
      * tranform schema to multilang schema, by `geonode:multilang-group` property
+     * return type as object like:
      * {
      *   'title': {
      *       "type": "object",
@@ -176,7 +177,8 @@ function MetadataEditor({
      *   }
     * @param {*} schema
     * @param {*} uiSchemaMultiLang
-    * @returns
+    * @returns {Object}
+    * @ignore
     */
     function schemaToMultiLang(schemaSingleLang, uiSchemaSingleLang) {
         const uiSchemaMultiLang = { ...uiSchemaSingleLang };
