@@ -243,6 +243,7 @@
             "copy": "Kopie",
             "createMap": "Karte erstellen",
             "addLayer": "Datensatz hinzufügen",
+            "synchMapLayersTitles": "Synchronisieren der Layer-Titel",
             "datasetsCatalogTitle": "Datensatzkatalog",
             "datasetsCatalogFilterPlaceholder": "Datensätze nach Titel oder Zusammenfassung filtern...",
             "datasetsCatalogEntriesNoResults": "Keine Ergebnisse entsprechen Ihrer Suche",

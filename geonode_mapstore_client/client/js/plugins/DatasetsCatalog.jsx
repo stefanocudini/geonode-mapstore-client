@@ -23,6 +23,8 @@ import { mapLayoutValuesSelector } from '@mapstore/framework/selectors/maplayout
 import ResourcesCompactCatalog from '@js/components/ResourcesCompactCatalog';
 import useIsMounted from "@js/hooks/useIsMounted";
 
+import { synchMapLayersTitles } from '@js/actions/gnsync';
+
 function DatasetsCatalog({
     onAdd,
     onZoomTo,
@@ -118,6 +120,27 @@ const DatasetsCatalogButton = ({
     );
 };
 
+const SynchLayersButton = ({
+    onClick,
+    size,
+    variant
+}) => {
+
+    const handleClickButton = () => {
+        onClick();
+    };
+
+    return (
+        <Button
+            size={size}
+            onClick={handleClickButton}
+            variant={variant}
+        >
+            #Synch Titles<Message msgId="gnviewer.synchMapLayersTitles" />#
+        </Button>
+    );
+}
+
 const ConnectedDatasetsCatalogButton = connect(
     createSelector([], () => ({})),
     {
@@ -125,13 +148,26 @@ const ConnectedDatasetsCatalogButton = connect(
     }
 )((DatasetsCatalogButton));
 
+const ConnectedSynchLayersButton = connect(
+    createSelector([], () => ({})),
+    {
+        onClick: synchMapLayersTitles.bind(null, 'datasetsCatalog', 'enabled', true)
+    }
+)((SynchLayersButton));
+
 export default createPlugin('DatasetsCatalog', {
     component: ConnectedDatasetsCatalogPlugin,
     containers: {
-        ActionNavbar: {
-            name: 'DatasetsCatalog',
-            Component: ConnectedDatasetsCatalogButton
-        }
+        ActionNavbar: [
+            {
+                name: 'DatasetsCatalog',
+                Component: ConnectedDatasetsCatalogButton
+            },
+            {
+                name: 'SynchLayers',
+                Component: ConnectedSynchLayersButton
+            }
+        ]
     },
     epics: datasetscatalogEpics,
     reducers: {}

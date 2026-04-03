@@ -241,6 +241,7 @@
             "copy": "Copy",
             "createMap": "Create Map",
             "addLayer": "Add layer",
+            "synchMapLayersTitles": "Synch Layers titles",
             "datasetsCatalogTitle": "Layers catalog",
             "datasetsCatalogFilterPlaceholder": "Filter datasets by title or abstract...",
             "datasetsCatalogEntriesNoResults": "No results match your search",

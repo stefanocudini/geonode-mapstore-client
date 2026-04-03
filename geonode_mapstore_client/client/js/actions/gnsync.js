@@ -15,3 +15,11 @@ export function syncResources() {
         type: SYNC_RESOURCES
     };
 }
+
+export const MAP_SYNCH_LAYERS_TITLES = 'GEONODE:MAP_SYNCH_LAYERS_TITLES';
+
+export function synchMapLayersTitles() {
+    return {
+        type: MAP_SYNCH_LAYERS_TITLES
+    };
+}

@@ -245,6 +245,7 @@
             "copy": "Copia",
             "createMap": "Crea Mappa",
             "addLayer": "Aggiungi set di dati",
+            "synchMapLayersTitles": "Sincronizza titoli dei layer",
             "datasetsCatalogTitle": "Catalogo dei set di dati",
             "datasetsCatalogFilterPlaceholder": "Filtra set di dati per titolo o descrizione...",
             "datasetsCatalogEntriesNoResults": "Nessun risultato corrisponde alla tua ricerca",

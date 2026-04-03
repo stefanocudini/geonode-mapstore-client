@@ -29,6 +29,8 @@ import { startAsyncProcess, STOP_ASYNC_PROCESS } from "@js/actions/resourceservi
 import { error as errorNotification } from "@mapstore/framework/actions/notifications";
 import { getProcessErrorInfo } from "@js/utils/ErrorUtils";
 
+import { MAP_SYNCH_LAYERS_TITLES } from '@js/actions/gnsync';
+
 // We need to include missing epics. The plugins that normally include this epic is not used.
 
 /**
@@ -129,6 +131,32 @@ export const gnSetDatasetsPermissions = (actions$, { getState = () => {}} = {}) 
                 });
         });
 
+
+/**
+ * synch map layers titles with new dataset titles from geonode api
+ * @param {*} actions$ 
+ * @param {*} param1 
+ * @returns 
+ */
+export const gnSynchMapLayersTitles = (actions$, { getState = () => {}} = {}) =>
+    actions$.ofType(MAP_SYNCH_LAYERS_TITLES)
+        .switchMap((action) => {
+            let layerNames = action.config?.map?.layers?.filter((l) =>
+                l?.group !== "background" && !!l?.extendedParams?.pk // skip layers of non-geonode origin
+            )?.map((l) => l.name) ?? [];
+            if (layerNames.length === 0) {
+                return Rx.Observable.empty();
+            }
+            return Rx.Observable.defer(() => getDatasetsByName(layerNames))
+                .switchMap((layers = []) => {
+                    const stateLayers = layers.map((l) => ({
+                        ...l,
+                        id: layersSelector(getState())?.find((la) => la.name === l.alternate)?.id
+                    }));
+                    return Rx.Observable.of(...stateLayers.map((l) => updateNode(l.id, 'layer', {title: l.title}) ));
+                });
+        });
+
 export const updateMapLayoutEpic = msUpdateMapLayoutEpic;
 
 /**
@@ -185,5 +213,6 @@ export default {
     updateMapLayoutEpic,
     gnSetDatasetsPermissions,
     gnListenToResourcesPendingExecution,
-    gnHandleAsyncProcessErrors
+    gnHandleAsyncProcessErrors,
+    gnSynchMapLayersTitles
 };
