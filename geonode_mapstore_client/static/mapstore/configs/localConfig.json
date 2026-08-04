@@ -90,6 +90,9 @@
         }
     ],
     "projectionDefs": [],
+    "miscSettings": {
+        "maxURLLength": null
+    },    
     "supportedLocales": {
         "en": {
             "code": "en-US",
