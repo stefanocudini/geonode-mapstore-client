@@ -21,6 +21,7 @@ MAPSTORE_TRANSLATIONS_PATH | list of paths where the client looks for translatio
 MAPSTORE_PROJECTION_DEFS | list of custom projection definitions to register in the client | []
 MAPSTORE_PROJECTION_DEFS_ENDPOINT | base URL of a GeoServer instance. Enables the remote projection search feature | SITEURL + '/geoserver' (embedded GeoServer)
 CHECK_SESSION_INTERVAL | interval in milliseconds to check if the user session is logged (0 for disable the polling) | 900000 (15 minutes)
+WMS_MAX_URL_LENGTH | maximum length of a WMS http get request URL (requests longer than this value will be converted to POST) | None (no limit)
 
 An example on how to update the `MAPSTORE_BASELAYERS` variable:
 
