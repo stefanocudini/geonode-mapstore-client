@@ -11,7 +11,7 @@ import { isEmpty, uniqBy, omit, orderBy, isString, isObject } from 'lodash';
 
 import { getConfigProp, convertFromLegacy, normalizeConfig } from '@mapstore/framework/utils/ConfigUtils';
 import { excludeGoogleBackground, extractTileMatrixFromSources } from '@mapstore/framework/utils/LayersUtils';
-import { SOURCE_TYPES, FEATURE_INFO_FORMAT, GXP_PTYPES, ResourceTypes, isDefaultDatasetSubtype, getDimensions, resourceToLayerConfig } from '@mapstore/framework/utils/GeoNodeUtils';
+import { SOURCE_TYPES, FEATURE_INFO_FORMAT, GXP_PTYPES, ResourceTypes, isDefaultDatasetSubtype, getDimensions, resourceToLayers, resourceToLayerConfig } from '@mapstore/framework/utils/GeoNodeUtils';
 
 import { getGeoNodeLocalConfig, parseDevHostname } from '@js/utils/APIUtils';
 import { ProcessTypes, ProcessStatus } from '@js/utils/ResourceServiceUtils';
@@ -23,34 +23,13 @@ export { SOURCE_TYPES,
     ResourceTypes,
     isDefaultDatasetSubtype,
     getDimensions,
+    resourceToLayers,
     resourceToLayerConfig
 };
 
 /**
 * @module utils/ResourceUtils
 */
-
-export const resourceToLayers = (resource) => {
-    if (resource?.resource_type === ResourceTypes.DATASET) {
-        return [{...resourceToLayerConfig(resource), isDataset: true}];
-    }
-    if (resource.maplayers && resource?.resource_type === ResourceTypes.MAP) {
-        return resource.maplayers
-            .map(maplayer => {
-                maplayer.dataset ? resourceToLayerConfig(maplayer.dataset) : null;
-                if (maplayer.dataset) {
-                    const layer = resourceToLayerConfig(maplayer.dataset);
-                    return {
-                        ...layer,
-                        style: maplayer.current_style
-                    };
-                }
-                return null;
-            })
-            .filter(value => value);
-    }
-    return [];
-}
 
 const RESOURCE_PUBLISHING_PROPERTIES_BASE = {
     'is_published': {
