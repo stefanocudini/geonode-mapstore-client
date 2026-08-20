@@ -17,7 +17,15 @@ import { getGeoNodeLocalConfig, parseDevHostname } from '@js/utils/APIUtils';
 import { ProcessTypes, ProcessStatus } from '@js/utils/ResourceServiceUtils';
 import { determineResourceType } from '@js/utils/FileUtils';
 
-export { SOURCE_TYPES, FEATURE_INFO_FORMAT, GXP_PTYPES, ResourceTypes, isDefaultDatasetSubtype, getDimensions, resourceToLayers, resourceToLayerConfig };
+export { SOURCE_TYPES,
+    FEATURE_INFO_FORMAT,
+    GXP_PTYPES,
+    ResourceTypes,
+    isDefaultDatasetSubtype,
+    getDimensions,
+    resourceToLayers,
+    resourceToLayerConfig
+};
 
 /**
 * @module utils/ResourceUtils
