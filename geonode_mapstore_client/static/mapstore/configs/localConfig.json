@@ -2009,10 +2009,6 @@
             },
             {
                 "mandatory": true,
-                "name": "MapViewersCatalog"
-            },
-            {
-                "mandatory": true,
                 "name": "ResourceDetails",
                 "cfg": {
                     "headerNodeSelector": ".gn-main-header",
