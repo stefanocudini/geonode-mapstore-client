@@ -68,6 +68,7 @@ def resource_urls(request):
         "ALLOWED_DOCUMENT_TYPES": getattr(settings, "ALLOWED_DOCUMENT_TYPES", []),
         "LANGUAGES": getattr(settings, "LANGUAGES", []),
         "WMS_MAX_URL_LENGTH": getattr(settings, "WMS_MAX_URL_LENGTH", None),
+        "COALESCE_WMS_LAYERS": getattr(settings, "COALESCE_WMS_LAYERS", False),
         "TRANSLATIONS_PATH": getattr(
             settings,
             "MAPSTORE_TRANSLATIONS_PATH",
