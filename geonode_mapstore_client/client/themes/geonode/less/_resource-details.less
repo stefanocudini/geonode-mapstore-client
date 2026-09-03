@@ -26,6 +26,10 @@
                 }
             }
         }
+
+        .gn-details-assets-date {
+            .color-var(@theme-vars[placeholder-color]);
+        }
     }
 }
 
@@ -61,6 +65,25 @@
             justify-content: center;
         }
 
+        .gn-details-assets-filter {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .form-control {
+                width: 100%;
+                padding-right: 2rem;
+            }
+
+            .ms-spinner,
+            .btn {
+                position: absolute;
+                right: 1px;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+
         .gn-details-assets-list {
             max-height: 300px;
             overflow-y: auto;
@@ -72,11 +95,17 @@
             .gn-details-assets-empty {
                 padding: 10px;
             }
+
+            table {
+                margin-bottom: 0;
+            }
+        }
+
+        .gn-details-assets-date {
+            white-space: nowrap;
         }
 
         .gn-details-assets-item {
-            justify-content: space-between;
-
             .gn-details-assets-delete {
                 margin: 2px;
                 padding: 2px 4px;
