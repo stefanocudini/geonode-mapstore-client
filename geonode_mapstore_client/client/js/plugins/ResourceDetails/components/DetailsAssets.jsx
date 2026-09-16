@@ -279,7 +279,7 @@ const DetailsAssets = ({
                 </Button>}
                 {loadingAssets && <Spinner />}
             </FlexBox>
-            <FlexBox column className={`gn-details-assets-list ${!allowUpload ? 'full-height' : ''}`}>
+            <FlexBox column className="gn-details-assets-list">
                 {loadError ? (
                     <FlexBox column centerChildrenVertically className="gn-details-assets-empty">
                         <Text fontSize="sm" strong>
