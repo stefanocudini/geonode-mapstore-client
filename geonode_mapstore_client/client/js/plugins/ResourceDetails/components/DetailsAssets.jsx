@@ -313,15 +313,20 @@ const DetailsAssets = ({
                                                 <FlexBox gap="sm" centerChildrenVertically>
                                                     <Glyphicon glyph="file" />
                                                     {asset.linkUrl ? <a href={asset.linkUrl}>{asset.title}</a> : asset.title}
-                                                    {asset.downloadUrl && <a download href={asset.downloadUrl}>
-                                                        <Glyphicon glyph="download" />
-                                                    </a>}
                                                 </FlexBox>
                                             </td>
                                             <td className="gn-details-assets-date">
                                                 {asset.created ? moment(asset.created).format('DD/MM/YYYY') : null}
                                             </td>
-                                            <td>
+                                            <td className="gn-details-assets-actions">
+                                                {asset.downloadUrl && <Button
+                                                    size="sm"
+                                                    href={asset.downloadUrl}
+                                                    download
+                                                    className="gn-details-assets-download"
+                                                >
+                                                    <Glyphicon glyph="download" />
+                                                </Button>}
                                                 <Button
                                                     size="sm"
                                                     onClick={() => showDelete && handleDeleteAsset(asset.id)}
