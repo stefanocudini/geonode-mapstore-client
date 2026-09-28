@@ -269,6 +269,7 @@ const DetailsAssets = ({
             </FlexBox>}
             <FlexBox centerChildrenVertically gap="sm" className="gn-details-assets-filter">
                 <InputControl
+                    className="gn-details-assets-filter-input"
                     placeholder="gnviewer.filterAssets"
                     value={filterText}
                     debounceTime={300}
