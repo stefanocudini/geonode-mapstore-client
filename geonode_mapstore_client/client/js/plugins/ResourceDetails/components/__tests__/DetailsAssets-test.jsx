@@ -45,6 +45,9 @@ const sampleAssets = [
     }
 ];
 
+// resource links containing at least one asset enable the initial assets request
+const assetLinks = [{ extras: { type: 'asset' } }];
+
 const getAssetRows = () => document.querySelectorAll('.gn-details-assets-list .gn-details-assets-item');
 
 describe('DetailsAssets component', () => {
@@ -75,7 +78,7 @@ describe('DetailsAssets component', () => {
     });
 
     it('should render 1 row for each asset returned by new endpoint', (done) => {
-        const resource = { pk: 10 };
+        const resource = { pk: 10, links: assetLinks };
 
         mockAxios.onGet(new RegExp(`/api/v2/resources/${resource.pk}/asset`)).reply(200, sampleAssets);
 
@@ -100,8 +103,31 @@ describe('DetailsAssets component', () => {
         }, 100);
     });
 
+    it('should not request the assets when resource links have no asset', (done) => {
+        const resource = { pk: 10, links: [{ extras: { type: 'image' } }] };
+
+        mockAxios.onGet(new RegExp(`/api/v2/resources/${resource.pk}/asset`)).reply(200, sampleAssets);
+
+        ReactDOM.render(
+            <DetailsAssets resource={resource} />,
+            document.getElementById('container')
+        );
+
+        setTimeout(() => {
+            try {
+                expect(mockAxios.history.get.length).toBe(0);
+                expect(getAssetRows().length).toBe(0);
+                expect(document.querySelector('.gn-details-assets-empty')).toBeTruthy();
+            } catch (e) {
+                done(e);
+                return;
+            }
+            done();
+        }, 100);
+    });
+
     it('should filter the assets list by title', (done) => {
-        const resource = { pk: 10 };
+        const resource = { pk: 10, links: assetLinks };
 
         mockAxios.onGet(new RegExp(`/api/v2/resources/${resource.pk}/asset`)).reply(200, sampleAssets);
 

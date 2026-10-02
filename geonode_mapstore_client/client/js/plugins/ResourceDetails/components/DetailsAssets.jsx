@@ -49,6 +49,10 @@ const parseAsset = (asset = {}) => ({
     downloadUrl: get(asset, 'urls.download_url')
 });
 
+// true when resource.links contains at least one asset link
+const hasAssetLinks = (resource) =>
+    (resource?.links ?? []).some(link => link?.extras?.type === 'asset');
+
 const AssetUploadWidget = ({
     resourcePk,
     uploading,
@@ -217,9 +221,13 @@ const DetailsAssets = ({
             });
     }, [resource?.pk]);
 
+    const resourceHasAssets = hasAssetLinks(resource);
+
     useEffect(() => {
-        fetchAssets();
-    }, [fetchAssets]);
+        if (resourceHasAssets) {
+            fetchAssets();
+        }
+    }, [fetchAssets, resourceHasAssets]);
 
     const handleDeleteAsset = useCallback((assetId) => {
         if (!resource?.pk || deletingAsset !== null) return;
