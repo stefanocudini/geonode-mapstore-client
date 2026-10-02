@@ -46,7 +46,7 @@ const sampleAssets = [
 ];
 
 // resource links containing at least one asset enable the initial assets request
-const assetLinks = [{ extras: { type: 'asset' } }];
+const assetLinks = [{ link_type: 'data', extension: 'pdf', url: 'http://localhost/api/v2/assets/1/link' }];
 
 const getAssetRows = () => document.querySelectorAll('.gn-details-assets-list .gn-details-assets-item');
 
@@ -104,7 +104,7 @@ describe('DetailsAssets component', () => {
     });
 
     it('should not request the assets when resource links have no asset', (done) => {
-        const resource = { pk: 10, links: [{ extras: { type: 'image' } }] };
+        const resource = { pk: 10, links: [{ link_type: 'image', url: 'http://localhost/uploaded/thumbs/thumb.png' }] };
 
         mockAxios.onGet(new RegExp(`/api/v2/resources/${resource.pk}/asset`)).reply(200, sampleAssets);
 

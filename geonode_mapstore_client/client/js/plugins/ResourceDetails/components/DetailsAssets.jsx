@@ -49,9 +49,12 @@ const parseAsset = (asset = {}) => ({
     downloadUrl: get(asset, 'urls.download_url')
 });
 
+// asset links are served by GeoNode at /api/v2/assets/<pk>/link[/<filename>]
+const ASSET_LINK_REGEX = /\/api\/v2\/assets\/\d+\/link(\/|$)/;
+
 // true when resource.links contains at least one asset link
 const hasAssetLinks = (resource) =>
-    (resource?.links ?? []).some(link => link?.extras?.type === 'asset');
+    (resource?.links ?? []).some(link => ASSET_LINK_REGEX.test(link?.url ?? ''));
 
 const AssetUploadWidget = ({
     resourcePk,
