@@ -83,4 +83,6 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           base: "master"
           title: "new client build"
-          body: "Automated client build from GeoNode Client CI"
+          body: |
+            Automated client build from GeoNode Client CI
+            Triggered by commit: ${{ github.sha }}
