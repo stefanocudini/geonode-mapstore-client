@@ -235,7 +235,7 @@ function ResourceDetailsPanel({
             "id": "assets",
             "labelId": "gnviewer.assets",
             "items": [true],
-            "disableIf": "{not resourceHasPermission(state('gnResourceData'), 'change_resourcebase')}"
+            "disableIf": "{not resourceHasPermission(state('gnResourceData'), 'view_resourcebase')}"
         },
         {
             "type": "data",
