@@ -198,9 +198,7 @@
         "right": "Dret",
         "left": "Esquerre",
         "bottom": "Fons",
-        "top": "Cim",
-        "editLayerName": "Edita el nom de la capa",
-        "confirmLayerName": "Confirmeu el canvi de nom de la capa"
+        "top": "Cim"
       },
       "legendOptions": {
         "title": "Llegenda",
@@ -287,11 +285,35 @@
       "tooltipDeactivate": "Sortiu del mode 3D",
       "tooltipActivate": "Introdu\u00efu el mode 3D"
     },
-    "cookie": {
-      "info": "Aquest lloc web utilitza cookies per millorar la vostra experi\u00e8ncia. Suposem que esteu b\u00e9 amb aix\u00f2,per\u00f2 podeu desactivar-lo si voleu.",
-      "moreDetailsButton": "M\u00e9s detalls",
-      "leave": "Deixar",
-      "accept": "Acceptar"
+    "privacySettings": {
+      "title": "Privacy settings",
+      "settings": "Privacy settings",
+      "necessary": "Functional and necessary",
+      "always": "Always active",
+      "functional": "Optional functional",
+      "statistics": "Statistics",
+      "marketing": "Marketing",
+      "unused": "Not used",
+      "on": "On",
+      "off": "Off",
+      "reject": "Reject optional",
+      "accept": "Accept optional",
+      "customize": "Customize",
+      "save": "Save choices",
+      "close": "Close",
+      "withdraw": "Withdraw all optional consent",
+      "baseline": "This configuration uses only necessary technical tools, which do not require consent. Closing this notice does not express consent.",
+      "optional": "Optional tools stay off until you choose. You can refuse them and continue using MapStore.",
+      "required": "Authentication when you sign in, security and remembering your privacy settings. See the Cookie Policy for purposes and duration.",
+      "status": "Change or withdraw consent at any time from the bottom bar. Withdrawal stops registered integrations; it cannot undo data already sent or remove third-party cookies.",
+      "storageError": "Your choice could not be saved. Optional tools remain off. Check browser storage and try again.",
+      "fixture": "LOCAL TEST FIXTURE: synthetic optional tools, not included in Vanilla.",
+      "templateWarning": "The policy pages still need to be configured! Current pages are still referring to the MapStore templates: the operator of this installation has not configured its own pages yet.",
+      "templateWarningLink": "How to configure them",
+      "policies": "Policies",
+      "cookie": "Cookie Policy",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use"
     },
     "background": "Fons",
     "language": "Llengua",
@@ -894,7 +916,20 @@
       "tooltipSlopeStart": "Un sol clic per dibuixar 3 punts que representen una superf\u00edcie del triangle.\nEl valor de la pendent es calcula en funci\u00f3 de la superf\u00edcie del triangle dibuixat",
       "altitude": "Altitud",
       "latitude": "Latitud",
-      "longitude": "Longitud"
+      "longitude": "Longitud",
+      "measurementsLayerTitle": "Mesures",
+      "styleRules": {
+        "geodesicMeasurement": "Mesura geodèsica",
+        "linearMeasurement": "Mesura lineal",
+        "angleMeasurement": "Mesura d'angle",
+        "slopeMeasurement": "Mesura de pendent",
+        "areaMeasurement": "Mesura d'àrea",
+        "startPosition": "Posició inicial",
+        "endPosition": "Posició final",
+        "centerPosition": "Posició central",
+        "segmentLabels": "Etiquetes de segment",
+        "measurementLabel": "Etiqueta de mesura"
+      }
     },
     "search": {
       "layerMustBeVisible": "La capa objectiu est\u00e0 inactiva",
@@ -963,6 +998,7 @@
       "serviceslistempty": "No es defineixen serveis personalitzats",
       "service_missing": "{serviceType} El servei no est\u00e0 configurat",
       "generic_error": "S'ha produ\u00eft un error durant la cerca. Detalls de l'error: {message}",
+      "services_error": "S'han produït alguns errors durant la cerca en els serveis: {message}",
       "showGFI": "Mostra GFI",
       "errors": {
         "nonQueriableLayers": "La capa proporcionada a l'URL no \u00e9s consultable o no \u00e9s visible al mapa.",

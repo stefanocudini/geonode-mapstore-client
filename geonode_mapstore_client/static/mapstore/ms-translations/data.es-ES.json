@@ -87,6 +87,9 @@
       "windowTitle": "Propiedades de la capa",
       "title": "Título",
       "name": "Nombre",
+      "url": "URL",
+      "typeName": "TypeName",
+      "wfsLinkedService": "Servicio WFS vinculado",
       "group": "Grupo",
       "description": "Descripción",
       "general": "General",
@@ -261,9 +264,20 @@
         "right": "Derecha",
         "left": "Izquierda",
         "bottom": "Bottom",
-        "top": "Cima",
-        "editLayerName": "Editar el nombre de la capa",
-        "confirmLayerName": "Confirmar cambio de nombre de capa"
+        "top": "Cima"
+      },
+      "sourceField": {
+        "edit": "Editar valor",
+        "confirm": "Confirmar valor",
+        "required": "Se requiere un valor",
+        "requiredUrl": "La URL del servicio es necesaria para validar este valor",
+        "requiredName": "El nombre de la capa es necesario para validar este valor",
+        "requiredSearchUrl": "La URL del servicio WFS es necesaria para validar este valor",
+        "requiredSearchTypeName": "El TypeName WFS es necesario para validar este valor",
+        "service": "El servicio no es accesible en esta URL. Corrija la URL o confirme de nuevo para mantener este valor",
+        "notFound": "No se encontró la capa en este servicio. Compruebe el nombre y la URL o confirme de nuevo para mantener este valor",
+        "load": "No se pudo cargar la capa, por ejemplo porque el estilo no es compatible. Corrija los valores o confirme para mantenerlos",
+        "generic": "La validación falló. Compruebe el nombre y la URL o confirme de nuevo para mantener este valor"
       },
       "legendOptions": {
         "title": "Leyenda",
@@ -366,11 +380,35 @@
       "tooltipDeactivate": "Salir del modo 3D",
       "tooltipActivate": "Entrar en el  modo 3D"
     },
-    "cookie": {
-      "info": "Esta sitio utiliza cookies para mejorar su experiencia. Asumiremos que está de acuerdo, si no puede optar por salir.",
-      "moreDetailsButton": "Más detalles",
-      "leave": "Abandonar",
-      "accept": "Aceptar"
+    "privacySettings": {
+      "title": "Configuración de privacidad",
+      "settings": "Configuración de privacidad",
+      "necessary": "Funcionales y necesarias",
+      "always": "Siempre activas",
+      "functional": "Funcionales opcionales",
+      "statistics": "Estadísticas",
+      "marketing": "Marketing",
+      "unused": "No utilizadas",
+      "on": "Activadas",
+      "off": "Desactivadas",
+      "reject": "Rechazar opcionales",
+      "accept": "Aceptar opcionales",
+      "customize": "Personalizar",
+      "save": "Guardar selección",
+      "close": "Cerrar",
+      "withdraw": "Retirar todos los consentimientos opcionales",
+      "baseline": "Esta configuración utiliza solo herramientas técnicas necesarias, que no requieren consentimiento. Cerrar este aviso no expresa consentimiento.",
+      "optional": "Las herramientas opcionales permanecen desactivadas hasta que usted elija. Puede rechazarlas y seguir usando MapStore.",
+      "required": "Autenticación al iniciar sesión, seguridad y memorización de su configuración de privacidad. Consulte la Política de cookies para conocer las finalidades y la duración.",
+      "status": "Puede cambiar o retirar el consentimiento en cualquier momento desde la barra inferior. La retirada detiene las integraciones registradas; no recupera datos ya enviados ni elimina cookies de terceros.",
+      "storageError": "No se pudo guardar su elección. Las herramientas opcionales siguen desactivadas. Compruebe el almacenamiento del navegador e inténtelo de nuevo.",
+      "fixture": "ENTORNO DE PRUEBA LOCAL: herramientas opcionales sintéticas, no incluidas en Vanilla.",
+      "templateWarning": "¡Las políticas todavía deben configurarse! Las páginas actuales siguen siendo las plantillas de MapStore: el operador de esta instalación todavía no ha configurado sus propias páginas.",
+      "templateWarningLink": "Cómo configurarlas",
+      "policies": "Políticas",
+      "cookie": "Política de cookies",
+      "privacy": "Política de privacidad",
+      "terms": "Condiciones de uso"
     },
     "background": "Fondo",
     "language": "Idioma",
@@ -995,7 +1033,20 @@
       "tooltipSlopeStart": "Un solo clic para dibujar 3 puntos que representan una superficie triangular.\nEl valor de la pendiente se calcula en función de la superficie triangular dibujada",
       "altitude": "Altitud",
       "latitude": "Latitud",
-      "longitude": "Longitud"
+      "longitude": "Longitud",
+      "measurementsLayerTitle": "Mediciones",
+      "styleRules": {
+        "geodesicMeasurement": "Medición geodésica",
+        "linearMeasurement": "Medición lineal",
+        "angleMeasurement": "Medición de ángulo",
+        "slopeMeasurement": "Medición de pendiente",
+        "areaMeasurement": "Medición de área",
+        "startPosition": "Posición inicial",
+        "endPosition": "Posición final",
+        "centerPosition": "Posición central",
+        "segmentLabels": "Etiquetas de segmento",
+        "measurementLabel": "Etiqueta de medición"
+      }
     },
     "search": {
       "layerMustBeVisible": "La capa de destino está inactiva",
@@ -1064,6 +1115,7 @@
       "serviceslistempty": "No se ha definido ningún servicio personalizado",
       "service_missing": "el servicio {serviceType} no está configurado",
       "generic_error": "Se ha producido un error durante la búsqueda. Error de detalles: {message}",
+      "services_error": "Se han producido algunos errores durante la búsqueda en los servicios: {message}",
       "showGFI": "Mostrar GFI",
       "errors": {
         "nonQueriableLayers": "La capa proporcionada en la url no es intercambiable o no es visible en el mapa",
@@ -1316,6 +1368,7 @@
         }
       },
       "spatialfilter": {
+        "notAvailable": "El filtrado espacial no está disponible para esta capa.",
         "filterType": "Tipo de filtro",
         "geometric_operation": "Operación geométrica",
         "combo_placeholder": "Seleccionar...",
@@ -1636,7 +1689,8 @@
           "title": "Error al cargar el enlace permanente",
           "pleaseLogin": "Este enlace permanente no es público. Intente iniciar sesión",
           "notFound": "Enlace permanente no encontrado",
-          "notAccessible": "Enlace permanente no accesible"
+          "notAccessible": "Enlace permanente no accesible",
+          "invalidTarget": "El destino del enlace permanente no es válido y no se puede abrir"
         },
         "save": {
           "title": "La generación del enlace permanente falló",
@@ -1813,6 +1867,12 @@
       "addToMap": "Añadir al mapa",
       "getWMSLink": "Enlace WMS",
       "error": "Ha ocurrido un error al cargar los datos.",
+      "errors": {
+        "unauthorized": "Se requiere autenticación para acceder al servicio de catálogo (HTTP 401).",
+        "forbidden": "Se denegó el acceso al servicio de catálogo (HTTP 403). Compruebe sus permisos.",
+        "http": "La solicitud al servicio de catálogo falló (HTTP {status}).",
+        "serviceUnavailable": "No se pudo contactar con el servicio de catálogo. Es posible que la solicitud haya sido bloqueada."
+      },
       "pageInfo": "{start}-{end} resultados de {total}",
       "resultInfo": "{total, plural, =0 No hay artículos} =1 {{total} artículo de {total}} other {{start}-{end} de {total}}}",
       "pageInfoInfinite": "{total, plural, =undefined {} =0 {No hay resultados} =1 {{total} de {total} emparejados} other {Cargado {loaded} de {total} emparejados}}",
@@ -2199,6 +2259,9 @@
       "title": "Exportar los datos",
       "service": "Servicio",
       "downloadMode": "Modo de exportación",
+      "visibleGranuleInfo": "Solo se descargará el gránulo actualmente visible en el mapa",
+      "timeAttributeInfo": "Seleccione el atributo que representa la información de tiempo en sus datos. Este atributo se utilizará para filtrar las entidades por una fecha u hora específica o un rango de horas.",
+      "timeAttribute": "Atributo de tiempo",
       "format": "Formato de fichero",
       "srs": "Sistema de referencia espacial",
       "export": "Exportar",
@@ -3251,6 +3314,7 @@
       "disableRange": "Desactivar intervalo de tiempo",
       "enablePlayBack": "Habilitar controles de reproducción",
       "disablePlayBack": "Deshabilitar los controles de reproducción",
+      "hiddenGuideLayerWarning": "La capa guía está oculta en la TOC y en el mapa, pero sigue controlando el ajuste de la línea de tiempo.",
       "expand": "Expandir el control deslizante de tiempo",
       "collapse": "Minimizar el control deslizante de tiempo",
       "reset": {
@@ -3263,6 +3327,10 @@
         "tooltip": "Haga clic aquí para ampliarlo de nuevo."
       },
       "errors": {
+        "invalidDateTitle": "Fecha u hora no válida",
+        "invalidDateMessage": "Introduzca una fecha y una hora completas y válidas.",
+        "invalidStartDate": "La fecha de inicio debe ser anterior a la fecha de fin.",
+        "invalidEndDate": "La fecha de fin debe ser posterior a la fecha de inicio.",
         "multidim_error_title": "El servicio de backend no responde",
         "multidim_error_message": "Los servicios requeridos para soporte multidinensional no están respondiendo. Inténtelo de nuevo más tarde o póngase en contacto con el administrador."
       }
@@ -4818,6 +4886,9 @@
       "filter": "Filtrar",
       "filters": "Filtros",
       "view": "Ver",
+      "cardLayoutGrid": "Cuadrícula",
+      "cardLayoutList": "Lista",
+      "cardLayoutTable": "Tabla",
       "resourcesFound": "{count, plural, =0 {0 Recursos encontrados} =1 {1 Recurso encontrado} other {# Recursos encontrados}}",
       "unadvertised": "El recurso no está anunciado. Está oculto en el catálogo y en los resultados de búsqueda",
       "mapUsesContext": "Este mapa utiliza el contexto: {contextName}",

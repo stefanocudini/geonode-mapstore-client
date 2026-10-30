@@ -87,6 +87,9 @@
       "windowTitle": "Proprietà del livello",
       "title": "Titolo",
       "name": "Nome",
+      "url": "URL",
+      "typeName": "TypeName",
+      "wfsLinkedService": "Servizio WFS collegato",
       "group": "Gruppo",
       "description": "Descrizione",
       "general": "Generale",
@@ -262,9 +265,20 @@
         "right": "Destra",
         "left": "Sinistra",
         "bottom": "Sotto",
-        "top": "Sopra",
-        "editLayerName": "Modifica il nome del livello",
-        "confirmLayerName": "Conferma la modifica del nome del livello"
+        "top": "Sopra"
+      },
+      "sourceField": {
+        "edit": "Modifica valore",
+        "confirm": "Conferma valore",
+        "required": "È richiesto un valore",
+        "requiredUrl": "L'URL del servizio è necessario per validare questo valore",
+        "requiredName": "Il nome del livello è necessario per validare questo valore",
+        "requiredSearchUrl": "L'URL del servizio WFS è necessario per validare questo valore",
+        "requiredSearchTypeName": "Il TypeName WFS è necessario per validare questo valore",
+        "service": "Il servizio non è raggiungibile a questo URL. Correggi l'URL o conferma di nuovo per mantenere questo valore",
+        "notFound": "Il livello non è stato trovato in questo servizio. Controlla il nome e l'URL o conferma di nuovo per mantenere questo valore",
+        "load": "Il caricamento del livello non è riuscito, ad esempio perché lo stile non è compatibile. Correggi i valori o conferma per mantenerli",
+        "generic": "Validazione non riuscita. Controlla il nome e l'URL o conferma di nuovo per mantenere questo valore"
       },
       "legendOptions": {
         "title": "Legenda",
@@ -366,11 +380,35 @@
       "tooltipDeactivate": "Disattiva la modalità 3D",
       "tooltipActivate": "Attiva la modalità 3D"
     },
-    "cookie": {
-      "info": "Questo sito web usa i cookie per migliorare la tua esperienza. Assumiamo che sei d'accordo sul loro utilizzo, ma puoi lasciare il sito se sei contrario.",
-      "moreDetailsButton": "Più dettagli",
-      "leave": "Lascia il sito",
-      "accept": "Accetto"
+    "privacySettings": {
+      "title": "Impostazioni privacy",
+      "settings": "Impostazioni privacy",
+      "necessary": "Funzionali e necessari",
+      "always": "Sempre attivi",
+      "functional": "Funzionali opzionali",
+      "statistics": "Statistiche",
+      "marketing": "Marketing",
+      "unused": "Non utilizzati",
+      "on": "Attivi",
+      "off": "Disattivati",
+      "reject": "Rifiuta opzionali",
+      "accept": "Accetta opzionali",
+      "customize": "Personalizza",
+      "save": "Salva le scelte",
+      "close": "Chiudi",
+      "withdraw": "Revoca tutti i consensi opzionali",
+      "baseline": "Questa configurazione utilizza solo strumenti tecnici necessari, per i quali non è richiesto il consenso. Chiudere questo avviso non esprime un consenso.",
+      "optional": "Gli strumenti opzionali restano spenti fino alla tua scelta. Puoi rifiutarli e continuare a usare MapStore.",
+      "required": "Autenticazione quando accedi, sicurezza e memorizzazione delle impostazioni privacy. Finalità e durata sono nella Cookie Policy.",
+      "status": "Puoi cambiare o revocare il consenso dalla barra inferiore. La revoca interrompe le integrazioni registrate; non ritira dati già inviati né elimina cookie di terzi.",
+      "storageError": "La scelta non è stata salvata. Gli opzionali restano spenti. Controlla lo storage del browser e riprova.",
+      "fixture": "FIXTURE DI TEST LOCALE: strumenti opzionali sintetici, esclusi da Vanilla.",
+      "templateWarning": "Le informative devono ancora essere configurate! Le pagine attuali sono ancora i modelli di MapStore: il gestore di questa installazione non ha ancora configurato le proprie pagine.",
+      "templateWarningLink": "Come configurarle",
+      "policies": "Informative",
+      "cookie": "Cookie Policy",
+      "privacy": "Informativa privacy",
+      "terms": "Termini di utilizzo"
     },
     "background": "Sfondo",
     "language": "Lingua",
@@ -995,7 +1033,20 @@
       "tooltipSlopeStart": "Click singolo per disegnare 3 punti che rappresentano una superficie triangolare.\nIl valore della pendenza viene calcolato in base alla superficie triangolare disegnata",
       "altitude": "Altitudine",
       "latitude": "Latitudine",
-      "longitude": "Longitudine"
+      "longitude": "Longitudine",
+      "measurementsLayerTitle": "Misurazioni",
+      "styleRules": {
+        "geodesicMeasurement": "Misura geodetica",
+        "linearMeasurement": "Misura lineare",
+        "angleMeasurement": "Misura dell'angolo",
+        "slopeMeasurement": "Misura della pendenza",
+        "areaMeasurement": "Misura dell'area",
+        "startPosition": "Posizione iniziale",
+        "endPosition": "Posizione finale",
+        "centerPosition": "Posizione centrale",
+        "segmentLabels": "Etichette dei segmenti",
+        "measurementLabel": "Etichetta della misura"
+      }
     },
     "search": {
       "layerMustBeVisible": "Il livello di destinazione è inattivo",
@@ -1063,7 +1114,8 @@
       "s_tooltip": "Descrizione comando del menu di servizio",
       "serviceslistempty": "Nessun servizio definito",
       "service_missing": "Il servizio {serviceType} non è configurato",
-      "generic_error": "Un errore e' occorso durante la ricerca: Dettagli errore: {message}",
+      "generic_error": "Un errore e' occorso durante la ricerca. Dettagli errore: {message}",
+      "services_error": "Si sono verificati alcuni errori durante la ricerca nei servizi: {message}",
       "showGFI": "Mostra GFI",
       "errors": {
         "nonQueriableLayers": "Il layer indicato nell'url non è queriable o non è visibile in mappa",
@@ -1316,6 +1368,7 @@
         }
       },
       "spatialfilter": {
+        "notAvailable": "Il filtro spaziale non è disponibile per questo livello.",
         "filterType": "Tipo di filtro",
         "geometric_operation": "Operazione Geometrica",
         "combo_placeholder": "Seleziona...",
@@ -1636,7 +1689,8 @@
           "title": "Errore durante il caricamento di peramlink",
           "pleaseLogin": "Questo permalink non è pubblico. Si prega di provare ad accedere",
           "notFound": "Permalink non trovato",
-          "notAccessible": "Permalink non accessibile"
+          "notAccessible": "Permalink non accessibile",
+          "invalidTarget": "La destinazione del permalink non è valida e non può essere aperta"
         },
         "save": {
           "title": "Generazione del permalink non riuscita",
@@ -1813,6 +1867,12 @@
       "addToMap": "Aggiungi alla mappa",
       "getWMSLink": "Ottieni link WMS",
       "error": "C'è stato un errore durante il caricamento dei dati",
+      "errors": {
+        "unauthorized": "Per accedere al servizio di catalogo è necessaria l'autenticazione (HTTP 401).",
+        "forbidden": "L'accesso al servizio di catalogo è stato negato (HTTP 403). Verifica le tue autorizzazioni.",
+        "http": "La richiesta al servizio di catalogo non è riuscita (HTTP {status}).",
+        "serviceUnavailable": "Non è stato possibile contattare il servizio di catalogo. La richiesta potrebbe essere stata bloccata."
+      },
       "pageInfo": "Risultati {start}-{end} di {total}",
       "resultInfo": "{total, plural, =0 {Nessun Risultato} =1 {{total} Risultato di {total}} other {{start}-{end} di {total}}}",
       "pageInfoInfinite": "{total, plural, =undefined {} =0 {Nessun Risultato} =1 {{total} risultato} other {Caricati {loaded} di {total} risultati}}",
@@ -2199,6 +2259,9 @@
       "title": "Esporta dati",
       "service": "Servizio",
       "downloadMode": "Modalità di esportazione",
+      "visibleGranuleInfo": "Verrà scaricato solo il granulo attualmente visibile nella mappa",
+      "timeAttributeInfo": "Seleziona l'attributo che rappresenta l'informazione temporale nei tuoi dati. Questo attributo verrà utilizzato per filtrare le entità in base a un'ora o a un intervallo di tempo specifico.",
+      "timeAttribute": "Attributo temporale",
       "format": "Formato file",
       "srs": "Sistema di riferimento",
       "export": "Esporta",
@@ -3255,6 +3318,7 @@
       "disableRange": "Disabilita intervallo",
       "enablePlayBack": "Abilita i controlli di riproduzione",
       "disablePlayBack": "Disabilita i controlli di riproduzione",
+      "hiddenGuideLayerWarning": "Il layer guida è nascosto nel TOC e sulla mappa, ma continua a controllare l'aggancio della timeline.",
       "expand": "Espandi",
       "collapse": "Riduci",
       "reset": {
@@ -3267,6 +3331,10 @@
         "tooltip": "Clicca qui per espanderla di nuovo"
       },
       "errors": {
+        "invalidDateTitle": "Data o ora non valida",
+        "invalidDateMessage": "Inserisci una data e un'ora complete e valide.",
+        "invalidStartDate": "La data di inizio deve precedere la data di fine.",
+        "invalidEndDate": "La data di fine deve essere successiva alla data di inizio.",
         "multidim_error_title": "Il servizio di backend non risponde",
         "multidim_error_message": "I servizi richiesti per il supporto multidimensionale non rispondono. Si prega di riprovare più tardi o contattare l'amministratore."
       }
@@ -4822,6 +4890,9 @@
       "filter": "Filtro",
       "filters": "Filtri",
       "view": "Visualizza",
+      "cardLayoutGrid": "Griglia",
+      "cardLayoutList": "Lista",
+      "cardLayoutTable": "Tabella",
       "resourcesFound": "{count, plural, =0 {0 Risorse trovate} =1 {1 Risorsa trovata} other {# Risorse trovate}}",
       "unadvertised": "La risorsa non è pubblicizzata. È nascosta dal catalogo e dai risultati di ricerca",
       "mapUsesContext": "Questa mappa usa il contesto: {contextName}",
@@ -5070,7 +5141,7 @@
       "direction": "Direzione",
       "reset": "Ripristina",
       "run": "Esegui",
-      "buckets": "Secchi",
+      "buckets": "Intervalli",
       "exportAsGeoJSON": "Esporta come GeoJSON",
       "addAsLayer": "Aggiungi come layer",
       "deleteResult": "Elimina risultato",
@@ -5083,8 +5154,8 @@
         "infoLayerAdded": "Layer isochrone aggiunto"
       },
       "colors": "Colori",
-      "rampTooltip": "Scegli la palette di colori per i secchi",
-      "colorTooltip": "Scegli il colore per il secchio",
+      "rampTooltip": "Scegli la palette di colori per gli intervalli",
+      "colorTooltip": "Scegli il colore per l'intervallo",
       "confirmDialog": {
         "title": "Chiudi il pannello Isochrone",
         "description": "Hai dati Isochrone esistenti. Chiudere il pannello cancellerà tutti i dati dell'esecuzione corrente. Sei sicuro di voler continuare?",

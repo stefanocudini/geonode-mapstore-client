@@ -87,6 +87,9 @@
       "windowTitle": "Ebenen Eigenschaften",
       "title": "Titel",
       "name": "Name",
+      "url": "URL",
+      "typeName": "TypeName",
+      "wfsLinkedService": "Verknüpfter WFS-Dienst",
       "group": "Gruppe",
       "description": "Beschreibung",
       "general": "Generell",
@@ -262,9 +265,20 @@
         "right": "Rechts",
         "left": "Links",
         "bottom": "Unten",
-        "top": "Oben",
-        "editLayerName": "Ebenennamen bearbeiten",
-        "confirmLayerName": "Bestätigen Sie die Änderung des Ebenennamens"
+        "top": "Oben"
+      },
+      "sourceField": {
+        "edit": "Wert bearbeiten",
+        "confirm": "Wert bestätigen",
+        "required": "Ein Wert ist erforderlich",
+        "requiredUrl": "Die Dienst-URL ist erforderlich, um diesen Wert zu validieren",
+        "requiredName": "Der Ebenenname ist erforderlich, um diesen Wert zu validieren",
+        "requiredSearchUrl": "Die WFS-Dienst-URL ist erforderlich, um diesen Wert zu validieren",
+        "requiredSearchTypeName": "Der WFS-TypeName ist erforderlich, um diesen Wert zu validieren",
+        "service": "Der Dienst ist unter dieser URL nicht erreichbar. Korrigieren Sie die URL oder bestätigen Sie erneut, um diesen Wert beizubehalten",
+        "notFound": "Die Ebene wurde in diesem Dienst nicht gefunden. Prüfen Sie den Namen und die URL oder bestätigen Sie erneut, um diesen Wert beizubehalten",
+        "load": "Die Ebene konnte nicht geladen werden, zum Beispiel weil der Stil nicht kompatibel ist. Korrigieren Sie die Werte oder bestätigen Sie, um sie beizubehalten",
+        "generic": "Die Validierung ist fehlgeschlagen. Prüfen Sie den Namen und die URL oder bestätigen Sie erneut, um diesen Wert beizubehalten"
       },
       "legendOptions": {
         "title": "Legende",
@@ -366,11 +380,35 @@
       "tooltipDeactivate": "Beenden Sie den 3D-Modus",
       "tooltipActivate": "Starten Sie den 3D-Modus"
     },
-    "cookie": {
-      "info": "Diese Webseite verwendet Cookies damit Sie diese einwandfrei nutzen können. Wir gehen davon aus, dass sie damit einverstanden sind, andernfalls können Sie die Webseite verlassen.",
-      "moreDetailsButton": "Mehr Details",
-      "leave": "Verlassen",
-      "accept": "Annehmen"
+    "privacySettings": {
+      "title": "Datenschutzeinstellungen",
+      "settings": "Datenschutzeinstellungen",
+      "necessary": "Funktional und notwendig",
+      "always": "Immer aktiv",
+      "functional": "Optionale Funktionen",
+      "statistics": "Statistik",
+      "marketing": "Marketing",
+      "unused": "Nicht verwendet",
+      "on": "An",
+      "off": "Aus",
+      "reject": "Optionale ablehnen",
+      "accept": "Optionale akzeptieren",
+      "customize": "Anpassen",
+      "save": "Auswahl speichern",
+      "close": "Schließen",
+      "withdraw": "Alle optionalen Einwilligungen widerrufen",
+      "baseline": "Diese Konfiguration verwendet nur notwendige technische Mittel, für die keine Einwilligung erforderlich ist. Das Schließen dieses Hinweises ist keine Einwilligung.",
+      "optional": "Optionale Mittel bleiben deaktiviert, bis Sie eine Wahl treffen. Sie können sie ablehnen und MapStore weiter verwenden.",
+      "required": "Authentifizierung bei der Anmeldung, Sicherheit und Speicherung Ihrer Datenschutzeinstellungen. Zwecke und Dauer finden Sie in der Cookie-Richtlinie.",
+      "status": "Sie können Ihre Einwilligung jederzeit über die untere Leiste ändern oder widerrufen. Der Widerruf beendet registrierte Integrationen; bereits gesendete Daten oder Cookies Dritter werden dadurch nicht entfernt.",
+      "storageError": "Ihre Auswahl konnte nicht gespeichert werden. Optionale Mittel bleiben deaktiviert. Prüfen Sie den Browserspeicher und versuchen Sie es erneut.",
+      "fixture": "LOKALE TESTUMGEBUNG: synthetische optionale Mittel, nicht in Vanilla enthalten.",
+      "templateWarning": "Die Richtlinienseiten müssen noch konfiguriert werden! Die aktuellen Seiten sind noch die Vorlagen von MapStore: Der Betreiber dieser Installation hat noch keine eigenen Seiten konfiguriert.",
+      "templateWarningLink": "So werden sie konfiguriert",
+      "policies": "Richtlinien",
+      "cookie": "Cookie-Richtlinie",
+      "privacy": "Datenschutzerklärung",
+      "terms": "Nutzungsbedingungen"
     },
     "background": "Hintergrund",
     "language": "Sprache",
@@ -1034,7 +1072,20 @@
       "tooltipSlopeStart": "Klicken Sie einmal, um 3 Punkte zu zeichnen, die eine Dreiecksfläche darstellen.\nDer Neigungswert wird basierend auf der gezeichneten Dreiecksfläche berechnet",
       "altitude": "Höhe",
       "latitude": "Lat",
-      "longitude": "Lon"
+      "longitude": "Lon",
+      "measurementsLayerTitle": "Messungen",
+      "styleRules": {
+        "geodesicMeasurement": "Geodätische Messung",
+        "linearMeasurement": "Lineare Messung",
+        "angleMeasurement": "Winkelmessung",
+        "slopeMeasurement": "Neigungsmessung",
+        "areaMeasurement": "Flächenmessung",
+        "startPosition": "Startposition",
+        "endPosition": "Endposition",
+        "centerPosition": "Mittelpunktposition",
+        "segmentLabels": "Segmentbeschriftungen",
+        "measurementLabel": "Messbeschriftung"
+      }
     },
     "search": {
       "layerMustBeVisible": "Die Zielebene ist inaktiv",
@@ -1103,6 +1154,7 @@
       "serviceslistempty": "Keine benutzerdefinierten Services definiert",
       "service_missing": "{serviceType} dienst ist nicht konfiguriert",
       "generic_error": "Bei der Suche ist ein Fehler aufgetreten. Fehlerdetails: {message}",
+      "services_error": "Bei der Suche in den Diensten sind einige Fehler aufgetreten: {message}",
       "showGFI": "GFI anzeigen",
       "errors": {
         "nonQueriableLayers": "Der in der URL angegebene Layer ist nicht abfragbar oder in der Karte nicht sichtbar.",
@@ -1355,6 +1407,7 @@
         }
       },
       "spatialfilter": {
+        "notAvailable": "Die räumliche Filterung ist für diese Ebene nicht verfügbar.",
         "filterType": "Filtertyp",
         "geometric_operation": "Geometrische Operation",
         "spatial_filter_header": "Interessensgebiet",
@@ -1675,7 +1728,8 @@
           "title": "Fehler beim Laden des Peramlinks",
           "pleaseLogin": "Dieser Permalink ist nicht öffentlich. Bitte versuchen Sie sich anzumelden",
           "notFound": "Permalink nicht gefunden",
-          "notAccessible": "Permalink nicht zugänglich"
+          "notAccessible": "Permalink nicht zugänglich",
+          "invalidTarget": "Das Ziel des Permalinks ist ungültig und kann nicht geöffnet werden"
         },
         "save": {
           "title": "Die Permalink-Generierung ist fehlgeschlagen",
@@ -1852,6 +1906,12 @@
       "addToMap": "Zur Karte hinzufügen",
       "getWMSLink": "WMS Link erhalten",
       "error": "Beim Laden der Daten ist ein Fehler aufgetreten",
+      "errors": {
+        "unauthorized": "Für den Zugriff auf den Katalogdienst ist eine Authentifizierung erforderlich (HTTP 401).",
+        "forbidden": "Der Zugriff auf den Katalogdienst wurde verweigert (HTTP 403). Überprüfen Sie Ihre Berechtigungen.",
+        "http": "Die Anfrage an den Katalogdienst ist fehlgeschlagen (HTTP {status}).",
+        "serviceUnavailable": "Der Katalogdienst konnte nicht erreicht werden. Möglicherweise wurde die Anfrage blockiert."
+      },
       "pageInfo": "Resultat {start}-{end} von {total}",
       "resultInfo": "{total, plural, =0 {Keine Gegenstände} =1 {{total} von {total} stimmt überein} other {{start}-{end} von {total}}}",
       "pageInfoInfinite": "{total, plural, =undefined {} =0 {Keine Ergebnisse} =1 {{total} von {total} stimmt überein} other {Geladen {loaded} von {total} übereinstimmend}",
@@ -2238,6 +2298,9 @@
       "title": "Daten exportieren",
       "service": "Service",
       "downloadMode": "Export modus",
+      "visibleGranuleInfo": "Es wird nur das aktuell in der Karte sichtbare Granule heruntergeladen",
+      "timeAttributeInfo": "Wählen Sie das Attribut aus, das die Zeitinformationen in Ihren Daten darstellt. Dieses Attribut wird verwendet, um Features nach einer bestimmten Zeit oder einem bestimmten Zeitbereich zu filtern.",
+      "timeAttribute": "Zeitattribut",
       "format": "Dateiformat",
       "srs": "Räumliches Bezugssystem",
       "export": "Export",
@@ -3294,6 +3357,7 @@
       "disableRange": "Zeitbereich deaktivieren",
       "enablePlayBack": "Aktivieren Sie die Wiedergabesteuerung",
       "disablePlayBack": "Deaktivieren Sie die Wiedergabesteuerung",
+      "hiddenGuideLayerWarning": "Die Führungslayer ist im Inhaltsverzeichnis und auf der Karte ausgeblendet, steuert aber weiterhin das Einrasten der Zeitleiste.",
       "expand": "Erweitern Sie den Zeitschieberegler",
       "collapse": "Schieberegler für die Zeitspanne reduzieren",
       "reset": {
@@ -3306,6 +3370,10 @@
         "tooltip": "Klicken Sie hier, um es erneut zu erweitern"
       },
       "errors": {
+        "invalidDateTitle": "Ungültiges Datum oder ungültige Uhrzeit",
+        "invalidDateMessage": "Geben Sie ein vollständiges, gültiges Datum und eine vollständige, gültige Uhrzeit ein.",
+        "invalidStartDate": "Das Startdatum muss vor dem Enddatum liegen.",
+        "invalidEndDate": "Das Enddatum muss nach dem Startdatum liegen.",
         "multidim_error_title": "Der Backend-Service reagiert nicht",
         "multidim_error_message": "Die erforderlichen Dienste für die mehrdimensionale Unterstützung reagieren nicht. Bitte versuchen Sie es später erneut oder wenden Sie sich an den Administrator."
       }
@@ -4861,6 +4929,9 @@
       "filter": "Filter",
       "filters": "Filter",
       "view": "Anzeigen",
+      "cardLayoutGrid": "Gitter",
+      "cardLayoutList": "Liste",
+      "cardLayoutTable": "Tabelle",
       "resourcesFound": "{count, plural, =0 {0 Ressourcen gefunden} =1 {1 Ressource gefunden} other {# Ressourcen gefunden}}",
       "unadvertised": "Ressource wird nicht beworben. Sie ist aus dem Katalog und den Suchergebnissen ausgeblendet",
       "mapUsesContext": "Diese Karte verwendet den Kontext: {contextName}",

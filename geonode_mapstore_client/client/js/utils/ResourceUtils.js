@@ -245,7 +245,8 @@ export const getResourceTypesInfo = () => ({
         icon: { glyph: 'document' },
         name: 'Document',
         canPreviewed: (resource) => resourceHasPermission(resource, 'download_resourcebase') && !!(determineResourceType(resource.extension) !== 'unsupported'),
-        hasPermission: (resource) => resourceHasPermission(resource, 'download_resourcebase'),
+        hasPermission: (resource) => resourceHasPermission(resource, 'view_resourcebase') || resourceHasPermission(resource, 'download_resourcebase'),
+        canDownload: (resource) => resourceHasPermission(resource, 'download_resourcebase'),
         formatEmbedUrl: (resource) => isDocumentExternalSource(resource) ? undefined : resource?.embed_url && parseDevHostname(resource.embed_url),
         formatDetailUrl: (resource) => resource?.detail_url && parseDevHostname(resource.detail_url),
         formatMetadataUrl: (resource) => `#/metadata/${resource.pk}`,
@@ -315,7 +316,7 @@ export const getResourceStatuses = (resource, userInfo) => {
         isDeleting,
         isCopying,
         items: [
-            ...(resource.advertised === false ? [{
+            ...(resource?.advertised === false ? [{
                 type: 'icon',
                 tooltipId: 'resourcesCatalog.unadvertised',
                 glyph: 'eye-slash'
@@ -744,13 +745,7 @@ export const getResourceWithLinkedResources = (resource = {}) => {
 };
 
 export const getResourceAdditionalProperties = (_resource = {}) => {
-    const resource =  getResourceWithLinkedResources(_resource);
-    const links = resource?.links || [];
-    const assets = links.filter(link => link?.extras?.type === 'asset' && link?.extras?.content?.title);
-    return {
-        ...resource,
-        assets: assets.length ? assets : [{_showEmptyState: true}] // add empty state flag to show assets section
-    };
+    return getResourceWithLinkedResources(_resource);
 };
 
 // Normalizes a dataset resource's `data` payload to the shape
